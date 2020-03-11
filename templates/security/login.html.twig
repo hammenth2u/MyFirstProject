@@ -18,7 +18,7 @@
               </div>
                   <label for="inputEmail" class="is-size-6">Mail</label>
                   <p class="control has-icons-left has-icons-right">
-                     <input type="text" value="{{ last_username }}" name="email" placeholder="Adresse e-mail" class="input" id="inputEmail" maxlength="180" required autofocus>
+                     <input type="email" value="{{ last_username }}" name="email" placeholder="Adresse e-mail" class="input" id="inputEmail" maxlength="180" required autofocus>
                      <span class="icon is-small is-left">
                      <i class="fas fa-user-circle"></i>
                      </span>
@@ -30,14 +30,10 @@
                      <i class="fa fa-lock"></i>
                      </span>
                   </p>
-                  <button class="button is-success mt-1">
-                  <i class="fas fa-check mr-1"></i></i>Se connecter
-                  </button>
             </div>
       </div>
       <input type="hidden" name="_csrf_token"
-         value="{{ csrf_token('authenticate') }}"
-         >
+         value="{{ csrf_token('authenticate') }}">
       {#
       Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
       See https://symfony.com/doc/current/security/remember_me.html
@@ -47,6 +43,9 @@
       </label>
       </div>
       #}
+       <button id="button" type="submit" class="button is-success mt-1">
+            <i class="fas fa-check mr-1"></i></i>Se connecter
+        </button>
    </div>
    </form>
 

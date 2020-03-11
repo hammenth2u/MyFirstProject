@@ -21,9 +21,9 @@ security:
                 authenticators:
                     - App\Security\UserAuthenticator
             logout:
-                path: app_logout
+                path: logout
                 # where to redirect after logout
-                # target: app_any_route
+                target: home
                     
 
             # activate different ways to authenticate

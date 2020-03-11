@@ -13,7 +13,7 @@
             {{ form_start(registrationForm) }}
             <div class="control">
                <div class="inline">
-                  <p>{{ form_label(registrationForm.email) }}</p>
+                  {{ form_label(registrationForm.email) }}
                   <p class="control has-icons-left has-icons-right">
                      {{ form_widget(registrationForm.email, {'attr': {'class': 'input', 'placeholder' : 'utilisateur@mail.com'}}) }}
                      <span class="icon is-small is-left">
@@ -22,7 +22,7 @@
                   </p>
                </div>
                <div class="inline">
-                  <p>{{ form_label(registrationForm.plainPassword) }}</p>
+                  {{ form_label(registrationForm.plainPassword) }}
                   <p class="control has-icons-left has-icons-right">
                      {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'input', 'placeholder' : '*********'}}) }}
                      <span class="icon is-small is-left">

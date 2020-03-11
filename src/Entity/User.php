@@ -73,6 +73,8 @@ class User implements UserInterface
         $this->accesses = new ArrayCollection();
         $this->cards = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
 

@@ -44,6 +44,8 @@ class RegistrationController extends AbstractController
                 $authenticator,
                 'main' // firewall name in security.yaml
             );
+
+            return $this->redirectToRoute('home');
         }
 
         return $this->render('registration/register.html.twig', [
