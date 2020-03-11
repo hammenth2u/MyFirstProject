@@ -11,10 +11,10 @@
   </head>
   <body>
     <header>
-      <nav class="navbar" role="navigation" aria-label="main navigation">
+      <nav class="navbar is-transparent" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
           <a href="{{ path('home') }}" class="navbar-item logo-title" href="https://bulma.io">
-          <img src="" width="106" height="52">Project-1
+          Project-1
           </a>
           <span class="navbar-burger burger" data-target="navbarMenuHeroB">
           <span></span>
@@ -23,11 +23,11 @@
           </span>
         </div>
         {% if not app.user %}
-        <div id="navbarMenuHeroB" class="navbar-menu">
+        <div id="navbarMenuHeroB" class="navbar-menu is-transparent">
           <div class="navbar-end">
             <div class="navbar-item">
               <div class="buttons">
-                <a href="{{ path('signup') }}" class="button is-primary"> 
+                <a href="{{ path('signup') }}" class="button is-dark"> 
                 <strong><i class="fas fa-user-circle mr-1"></i>S'enregistrer</strong>
                 </a> 
                 <a href="{{ path('signin') }}" class="button is-light">
@@ -56,6 +56,19 @@
       </nav>
     </header>
     {% block body %}
+    {% endblock %}
+    {% block footer %}
+    <div class="columns is-multiline is-mobile has-text-centered is-12">
+            <div class="column is-mobile is-12">
+                <div class="columns is-mobile is-centered is-multiline">
+                    <a href=""><div class="column has-text-white"><i class="fas fa-users mr-1"></i>Qui sommes nous ?</div></a>
+                    <a href=""><div class="column has-text-white"><i class="fas fa-question-circle mr-1"></i>FAQ</div></a>
+                    <a href=""><div class="column has-text-white"><i class="fas fa-envelope-open-text mr-1"></i>Contact</div></a>
+                    <a href=""><div class="column has-text-white"><i class="fas fa-balance-scale mr-1"></i>Mentions légales</div></a>
+                </div>
+            </div>
+		</div>
+    </div>
     {% endblock %}
     {% block javascripts %}
     <script src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
