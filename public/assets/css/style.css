@@ -1,0 +1,24 @@
+/* Core */
+
+header, body, footer {
+    max-width: 1200px;
+}
+
+ /* Modifiers */
+
+ .mr-1 {
+    margin-right: 0.4rem;
+ } 
+
+ .ml-1 {
+     margin-left: 0.4rem;
+ }
+
+ .mt-1 {
+     margin-top: 0.4rem;
+ }
+
+ .is-centered {
+    margin-right: auto;
+    margin-left: auto;
+ }

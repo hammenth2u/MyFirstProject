@@ -1,15 +1,48 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}S'enregistrer{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+<section class="container">
+<div class="container">
+<div class="columns is-centered">
+<div class="column is-5-tablet is-4-desktop is-3-widescreen">
 
-        <button class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+<form method="post">
+   <div class="is-size-5 mb-1 has-text-centered">
+   <i class="fas fa-user-circle mr-1"></i>S'enregistrer</h1>
+   {{ form_start(registrationForm) }}
+   <div class="control">
+      <div class="inline">
+         <p>{{ form_label(registrationForm.email) }}</p>
+         <p class="control has-icons-left has-icons-right">
+            {{ form_widget(registrationForm.email, {'attr': {'class': 'input', 'placeholder' : 'utilisateur@mail.com'}}) }}
+            <span class="icon is-small is-left">
+            <i class="fas fa-at"></i>
+            </span>
+         </p>
+      </div>
+      <div class="inline">
+         <p>{{ form_label(registrationForm.plainPassword) }}</p>
+         <p class="control has-icons-left has-icons-right">
+            {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'input', 'placeholder' : '*********'}}) }}
+            <span class="icon is-small is-left">
+            <i class="fas fa-lock"></i>
+            </span>
+         </p>
+      </div>
+      <div class="inline">
+         <label class="checkbox">
+         {{ form_widget(registrationForm.agreeTerms, {'attr'
+         : {'type' : 'checkbox'}}) }}
+         J'accepte les termes et conditions
+         </label>
+      </div>
+      {{ form_end(registrationForm) }}
+</form>
+
+<button class="button is-success mt-1" id="button"><i class="fas fa-check mr-1"></i>S'enregistrer</button>
+</div>
+
 {% endblock %}
