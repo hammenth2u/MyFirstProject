@@ -1,0 +1,41 @@
+App\Entity\Project:
+    project_{1..8}:
+        name: '<text(20)>'
+        createdAt: '<date_create()>'
+        user: '@user*'
+
+App\Entity\Card:
+    card_{1..8}:
+        description: '<text(200)>'
+        name: '<word()>'
+        status: '<text(10)>'
+        createdAt: '<date_create()>'
+        user: '@user*'
+        project: '@project*'
+
+App\Entity\Label:
+    label_{1..15}:
+        name: '<word()>'
+        color: '<word()>'
+        createdAt: '<date_create()>'
+
+App\Entity\Comment:
+    comment_{1..15}:
+        content: '<text()>'
+        createdAt: '<date_create()>'
+        user: '@user*'
+        card: '@card*'
+
+App\Entity\Access:
+    access_{1..15}:
+        createdAt: '<date_create()>'
+        accessType: '<word()>'
+        user: '@user*'
+        project: '@project*'
+
+App\Entity\User:
+    user_{1..10}:
+        createdAt: '<date_create()>'
+        email: '<email()>'
+        password: '<sha256()>'
+        roles: ["ROLE_USER"]
