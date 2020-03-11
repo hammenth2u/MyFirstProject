@@ -14,6 +14,7 @@
             <div class="control">
                <div class="inline">
                   {{ form_label(registrationForm.email) }}
+                  {{ form_errors(registrationForm.email) }}
                   <p class="control has-icons-left has-icons-right">
                      {{ form_widget(registrationForm.email, {'attr': {'class': 'input', 'placeholder' : 'utilisateur@mail.com'}}) }}
                      <span class="icon is-small is-left">
@@ -23,6 +24,7 @@
                </div>
                <div class="inline">
                   {{ form_label(registrationForm.plainPassword) }}
+                  {{ form_errors(registrationForm.plainPassword) }}
                   <p class="control has-icons-left has-icons-right">
                      {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'input', 'placeholder' : '*********'}}) }}
                      <span class="icon is-small is-left">
