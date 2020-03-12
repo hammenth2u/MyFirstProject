@@ -74,7 +74,6 @@ class User implements UserInterface
         $this->cards = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
     }
 
 

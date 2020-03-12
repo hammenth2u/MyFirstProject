@@ -58,6 +58,7 @@ class Project
         $this->cards = new ArrayCollection();
         $this->labels = new ArrayCollection();
         $this->accesses = new ArrayCollection();
+        $this->createdAt = new \DateTime();
     }
 
     public function getId(): ?int

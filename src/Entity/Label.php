@@ -51,6 +51,7 @@ class Label
     public function __construct()
     {
         $this->cards = new ArrayCollection();
+        $this->createdAt = new \DateTime();
     }
 
     public function getId(): ?int

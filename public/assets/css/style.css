@@ -28,6 +28,26 @@ body {
     margin-bottom: 1rem;
 }
 
+@media screen and (max-width: 1023px) {
+.navbar-menu {
+    background-color: transparent;
+}
+}
+
+@media screen and (min-width: 1024px) {
+.navbar-item, .navbar-link {
+    align-items: inherit !important;
+}
+}
+
+.dashboard {
+    border: 1px solid lightgray;
+    border-radius: 4px;
+    color: grey;
+    background-color: #ffffff;
+    opacity: 0.9;
+}
+
  /* Modifiers */
 
  .mr-1 {
@@ -49,4 +69,8 @@ body {
 
  .is-transparent {
     background-color: transparent
+ }
+
+ .underline {
+     text-decoration: underline;
  }

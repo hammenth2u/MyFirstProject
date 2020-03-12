@@ -7,13 +7,17 @@
     {% block stylesheets %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
     {% endblock %}
   </head>
   <body>
     <header>
       <nav class="navbar is-transparent" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-          <a href="{{ path('home') }}" class="navbar-item logo-title" href="https://bulma.io">
+          <a href="{{ path('home') }}" class="navbar-item" href="{{ path('home') }}">
           Project-1
           </a>
           <span class="navbar-burger burger" data-target="navbarMenuHeroB">
@@ -22,6 +26,7 @@
           <span></span>
           </span>
         </div>
+
         {% if not app.user %}
         <div id="navbarMenuHeroB" class="navbar-menu is-transparent">
           <div class="navbar-end">
@@ -38,13 +43,21 @@
           </div>
         </div>
         {% endif %}
+
         {% if app.user %}
+        <div id="navbarStart" class="navbar-menu">
+          <div class="navbar-start">
+            <div class="navbar-item">
+              <a href="{{ path('dashboard') }}" class="button is-dark"> 
+                <i class="fas fa-columns mr-1"></i>Dashboard
+              </a>
+          </div>
+        </div>
+          
         <div id="navbarMenuHeroB" class="navbar-menu">
           <div class="navbar-end">
             <div class="navbar-item">
               <div class="buttons">
-                Mon compte
-                </a> 
                 <a href="{{ path('logout') }}" class="button is-light">
                 <i class="fas fa-sign-in-alt mr-1"></i>Déconnexion
                 </a>
@@ -72,10 +85,6 @@
     {% endblock %}
     {% block javascripts %}
     <script src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-    <script
-  src="https://code.jquery.com/jquery-3.4.1.min.js"
-  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-  crossorigin="anonymous"></script>
     <script src="{{ asset('assets/js/burger.js') }}"></script>
     {% endblock %}
   </body>

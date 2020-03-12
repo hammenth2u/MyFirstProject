@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<section class="container">
+<div class="columns has-text-centered is-multiline is-centered underline">
+   <div class="column dashboard is-full">
+        <i class="fas fa-columns mr-1"></i>Tableau de bord
+    </div>
+   </div>
+   <div class="column is-full has-text-centered">
+   {{ userProjects|length }}
+    {% for userProject in userProjects %}
+        <li>{{ userProject.name }}</li>
+    {% else %}
+   <i class="fas fa-exclamation-circle mr-1"></i>Aucun projet trouvé
+   {% endfor %}
+   </div>
+   <div class="column is-full">
+   <button id="modal" class="button is-danger is-rounded"><i class="fas fa-plus mr-1"></i>Créer un nouveau projet</button>
+   </div>
+</div>
+</section>
+
+<div class="modal has-text-grey">
+  <div class="modal-background"></div>
+   <form method="post">
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Créer un nouveau projet</p>
+      <button class="delete close" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+      {{ form_start(projectForm) }}
+            <div class="control">
+               <div class="inline">
+                  {{ form_label(projectForm.name) }}
+                  {{ form_errors(projectForm.name) }}
+                  <p class="control has-icons-left has-icons-right">
+                     {{ form_widget(projectForm.name, {'attr': {'class': 'input', 'placeholder' : 'Nom du projet'}}) }}
+                     <span class="icon is-small is-left">
+                     <i class="fab fa-product-hunt"></i>
+                     </span>
+                  </p>
+               </div>
+      {{ form_end(projectForm) }}
+    </section>
+    </form>
+    <footer class="modal-card-foot">
+      <button id="button" type="submit" class="button is-success">Créer le projet</button>
+      <button class="button close">Annuler</button>
+    </footer>
+  </div>
+</div>
+
+<script>
+$("#modal").click(function() {
+  $(".modal").addClass("is-active");  
+});
+
+$(".close").click(function() {
+   $(".modal").removeClass("is-active");
+});
+</script>
+
+
+{% endblock %}
