@@ -54,7 +54,7 @@ class AppController extends AbstractController
 
          return $this->render('app/dashboard.html.twig', [
              'controller_name' => 'AppController',
-             'userProjects'    => 'userProjects',
+             'userProjects'    => $userProjects,
              'projectForm'     => $projectForm->createView(),
          ]);
      }

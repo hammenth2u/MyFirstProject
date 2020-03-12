@@ -10,7 +10,6 @@
     </div>
    </div>
    <div class="column is-full has-text-centered">
-   {{ userProjects|length }}
     {% for userProject in userProjects %}
         <li>{{ userProject.name }}</li>
     {% else %}
