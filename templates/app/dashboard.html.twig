@@ -11,7 +11,7 @@
    </div>
    <div class="column is-full has-text-centered">
     {% for userProject in userProjects %}
-        <li>{{ userProject.name }}</li>
+        <li><a href="{{ path('showProject', {id: userProject.project.id}) }}">{{ userProject.project.name }}</a></li>
     {% else %}
    <i class="fas fa-exclamation-circle mr-1"></i>Aucun projet trouvé
    {% endfor %}

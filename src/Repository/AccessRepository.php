@@ -47,4 +47,44 @@ class AccessRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    /**
+     * 
+     * @param User $user
+     * @return Access[]
+     */
+    public function findByUser($user)
+    {
+        $qb = $this->createQueryBuilder('a')
+        ->addSelect('u')
+        ->join('a.user', 'u')
+        ->where('a.user = :myUser')
+        ->setParameter('myUser', $user)
+        ->orderBy('a.createdAt', 'ASC')
+        ->setMaxResults(25)
+        ;
+    
+        //cast retour de requete
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * 
+     * @param Project $project
+     * @param User $user 
+     * @return Access[]
+     */
+    public function findAccessByUserAndProject($user, $project)
+    {
+        $query = $this->getEntityManager()->createQuery('
+
+            SELECT a
+            FROM App\Entity\Access a
+            WHERE a.user = :user
+            AND a.project = :project
+        ')
+        ->setParameter('project', $project)
+        ->setParameter('user', $user);
+        return $query->getResult(); 
+    }
 }

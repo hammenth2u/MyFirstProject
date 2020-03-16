@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Access;
 use App\Entity\User;
 use App\Form\ProjectFormType;
 use App\Entity\Project;
@@ -28,7 +29,7 @@ class AppController extends AbstractController
      public function dashboard(Request $request) : Response
      {
          // Récupération des projets déjà créés par l'utilisateur
-         $userProjects = $this->getDoctrine()->getRepository(Project::class)->findUserProjects($this->getUser());
+         $userProjects = $this->getDoctrine()->getRepository(Access::class)->findByUser($this->getUser());
 
          // Formulaire de création d'un nouveau projet
          $project = new Project();
@@ -46,6 +47,13 @@ class AppController extends AbstractController
             $entityManager->flush();
 
             // Il faudra aussi ajouter l'accès à l'utilisateur dans la table Access pour qu'il puisse accéder au projet (à voir plus tard)
+            $access = new Access();
+            $access->setUser($this->getUser());
+            $access->setProject($project);
+            $access->setAccessType('admin');
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($access);
+            $entityManager->flush();
 
             return $this->redirectToRoute('dashboard');
         }

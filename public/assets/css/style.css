@@ -1,7 +1,7 @@
 /* Core */
 
 header, body, footer {
-    max-width: 1200px;
+    /* max-width: 1200px; */
     color: white;
 }
 
@@ -46,6 +46,11 @@ body {
     color: grey;
     background-color: #ffffff;
     opacity: 0.9;
+}
+
+.task {
+    padding: 4em 4em 4em 4em;
+    margin: 1em 1em 1em 1em;
 }
 
  /* Modifiers */
