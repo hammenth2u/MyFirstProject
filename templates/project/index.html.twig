@@ -14,7 +14,7 @@
          <div class="level-item has-text-centered">
          <div>
           <p class="heading">Tâches créées</p>
-          <p class="title">0</p>
+          <p class="title">{{ cardsNew|length }}</p>
          </div>
         </div>
     </div>
@@ -62,19 +62,26 @@
       <button class="delete close" aria-label="close"></button>
     </header>
     <section class="modal-card-body">
-      {# {{ form_start(projectForm) }}
+      {{ form_start(cardForm) }}
             <div class="control">
                <div class="inline">
-                  {{ form_label(projectForm.name) }}
-                  {{ form_errors(projectForm.name) }}
+                  {{ form_label(cardForm.name) }}
+                  {{ form_errors(cardForm.name) }}
                   <p class="control has-icons-left has-icons-right">
-                     {{ form_widget(projectForm.name, {'attr': {'class': 'input', 'placeholder' : 'Nom du projet'}}) }}
+                     {{ form_widget(cardForm.name, {'attr': {'class': 'input', 'placeholder' : 'Nom de la tâche'}}) }}
                      <span class="icon is-small is-left">
-                     <i class="fab fa-product-hunt"></i>
+                     <i class="fas fa-tasks"></i>
                      </span>
                   </p>
                </div>
-      {{ form_end(projectForm) }} #}
+               <div class="field">
+                  <div class="control">
+                  {{ form_label(cardForm.description) }}
+                  {{ form_errors(cardForm.description) }}
+                     {{ form_widget(cardForm.description, {'attr': {'class': 'textarea', 'placeholder' : 'Description'}}) }}
+                  </div>
+               </div>
+      {{ form_end(cardForm) }}
     </section>
     </form>
     <footer class="modal-card-foot">

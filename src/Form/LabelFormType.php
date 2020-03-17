@@ -2,38 +2,34 @@
 
 namespace App\Form;
 
-use App\Entity\Card;
+use App\Entity\Label;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\ColorType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\NotBlank;
-class CardFormType extends AbstractType
+
+class LabelFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('name')
-        ->add('description' , TextareaType::class, [
+            ->add('name', TextType::class, [
                 'constraints' => [
                  new NotBlank([
-                    'message' => 'La description de la tâche ne peut être vide',
+                    'message' => 'Le nom du label ne peut être vide',
                  ]),
                 ],
             ])
-            //->add('createdAt')
-            //->add('updatedAt')
-            //->add('status')
-            //->add('project')
-            //->add('labels')
-            //->add('user')
+            ->add('color',ColorType::class)
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Card::class,
+            'data_class' => Label::class,
         ]);
     }
 }

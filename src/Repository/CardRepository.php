@@ -47,4 +47,25 @@ class CardRepository extends ServiceEntityRepository
         ;
     }
     */
+    
+    /**
+     * Méthode qui retourne les tâches pour un projet donnée
+     * 
+     * @param Project $project
+     * @return Card[]
+     */
+    public function findCardsByProjectStatusNew($project)
+    {
+        $query = $this->getEntityManager()->createQuery('
+            SELECT c, p 
+            FROM App\Entity\Card c
+            JOIN c.project p
+            WHERE c.project = :project
+            AND c.status = :status
+            ORDER BY c.createdAt DESC
+        ')
+        ->setParameter('project', $project)
+        ->setParameter('status', 'new');
+        return $query->getResult(); 
+    }
 }

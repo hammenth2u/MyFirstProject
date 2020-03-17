@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Access;
+use App\Entity\Card;
 use App\Entity\User;
 use App\Form\ProjectFormType;
 use App\Entity\Project;
@@ -66,4 +67,36 @@ class AppController extends AbstractController
              'projectForm'     => $projectForm->createView(),
          ]);
      }
+
+    /**
+     * @Route("/contact", name="contact")
+     */
+    public function contact()
+    {
+        return $this->render('app/contact.html.twig');
+    }
+
+    /**
+     * @Route("/faq", name="faq")
+     */
+    public function faq()
+    {
+        return $this->render('app/faq.html.twig');
+    }
+
+    /**
+     * @Route("/about", name="about")
+     */
+    public function about()
+    {
+        return $this->render('app/about.html.twig');
+    }
+
+    /**
+     * @Route("/legal-notice", name="legalNotice")
+     */
+    public function legalNotice()
+    {
+        return $this->render('app/legalnotice.html.twig');
+    }
 }
