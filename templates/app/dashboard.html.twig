@@ -4,14 +4,14 @@
 
 {% block body %}
 <section class="container">
-<div class="columns has-text-centered is-multiline is-centered underline">
+<div class="columns has-text-centered is-multiline underline">
    <div class="column dashboard is-full mb-1">
         <i class="fas fa-columns mr-1"></i>Tableau de bord
     </div>
    </div>
-   <div class="columns mt-1 is-multiline is-full has-text-centered">
+   <div class="columns is-centered mt-1 is-multiline is-full has-text-centered">
     {% for userProject in userProjects %}
-        <div class="column is-centered project is-3" p-id="{{ userProject.project.id }}"><i class="fab fa-product-hunt mr-1"></i>{{ userProject.project.name }}</div>
+        <div class="column project is-3" p-id="{{ userProject.project.id }}"><i class="fab fa-product-hunt mr-1"></i>{{ userProject.project.name }}</div>
     {% else %}
    <i class="fas fa-exclamation-circle mr-1"></i>Aucun projet trouvé
    {% endfor %}

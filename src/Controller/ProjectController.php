@@ -18,13 +18,16 @@ class ProjectController extends AbstractController
      */
     public function showProject(Project $project, Request $request) : Response
     {
-        $cardsNew = $this->getDoctrine()->getRepository(Card::class)->findCardsByProjectStatusNew($project);
-        dump($cardsNew);
-
         $user = $this->getUser();
-        $projectName = $project->getName();
 
         $access = $this->getDoctrine()->getRepository(Access::class)->findAccessByUserAndProject($user, $project);
+
+        //vérification des accès
+        if ($access != null) {
+
+        $projectName = $project->getName();
+
+        $cardsNew = $this->getDoctrine()->getRepository(Card::class)->findCardsByProjectStatusNew($project);
 
         // Formulaire de création d'une nouvelle tâche
         $card = new Card();
@@ -44,18 +47,14 @@ class ProjectController extends AbstractController
            return $this->redirectToRoute('showProject', ['id' => $project->getId() ]);
        }
 
-        //vérification des accès 
-        if ($access !== []){
             return $this->render('project/index.html.twig', [
                 'projectName' => $projectName,
                 'cardForm'    => $cardForm->createView(),
                 'cardsNew'       => $cardsNew
             ]);
         } else {
-            return $this->render('project/index.html.twig', [
-                'projectName' => $projectName,
-                //'cardForm'    => $cardForm->createView(),
-            ]);
+            // Accès non autorisé
+            return $this->redirectToRoute('dashboard');
         }
 
     }
