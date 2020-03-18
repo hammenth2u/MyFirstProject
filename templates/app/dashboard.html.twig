@@ -5,13 +5,13 @@
 {% block body %}
 <section class="container">
 <div class="columns has-text-centered is-multiline is-centered underline">
-   <div class="column dashboard is-full">
+   <div class="column dashboard is-full mb-1">
         <i class="fas fa-columns mr-1"></i>Tableau de bord
     </div>
    </div>
-   <div class="column is-full has-text-centered">
+   <div class="columns mt-1 is-multiline is-full has-text-centered">
     {% for userProject in userProjects %}
-        <li><a href="{{ path('showProject', {id: userProject.project.id}) }}">{{ userProject.project.name }}</a></li>
+        <div class="column is-centered project is-3" p-id="{{ userProject.project.id }}"><i class="fab fa-product-hunt mr-1"></i>{{ userProject.project.name }}</div>
     {% else %}
    <i class="fas fa-exclamation-circle mr-1"></i>Aucun projet trouvé
    {% endfor %}
@@ -60,6 +60,11 @@ $("#modal").click(function() {
 
 $(".close").click(function() {
    $(".modal").removeClass("is-active");
+});
+
+$(".project").click(function() {
+   let projectId = jQuery(this).attr("p-id");
+   window.location.href="http://127.0.0.1:8001/p/" + projectId; 
 });
 </script>
 

@@ -81,6 +81,13 @@ html {
   background-color: #fafafa;
 }
 
+.project {
+    background-color: white;
+    color: black;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
  /* Modifiers */
 
  .mr-1 {
@@ -93,6 +100,10 @@ html {
 
  .mt-1 {
      margin-top: 0.4rem;
+ }
+
+ .mb-1 {
+     margin-bottom: 0.4rem;
  }
 
  .is-centered {
