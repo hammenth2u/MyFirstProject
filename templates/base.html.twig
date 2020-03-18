@@ -18,6 +18,7 @@
       <nav class="navbar is-transparent" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
           <a href="{{ path('home') }}" class="navbar-item" href="{{ path('home') }}">
+          <img src="{{ asset('assets/img/logo.png') }}">
           Project-1
           </a>
           <span class="navbar-burger burger" data-target="navbarMenuHeroB">
@@ -71,17 +72,19 @@
     {% block body %}
     {% endblock %}
     {% block footer %}
-    <div class="columns is-multiline is-mobile has-text-centered is-12">
-            <div class="column is-mobile is-12">
-                <div class="columns is-mobile is-centered is-multiline">
-                    <a href="{{ path('about')}}"><div class="column has-text-white"><i class="fas fa-users mr-1"></i>Qui sommes nous ?</div></a>
-                    <a href="{{ path('faq')}}"><div class="column has-text-white"><i class="fas fa-question-circle mr-1"></i>FAQ</div></a>
-                    <a href="{{ path('contact')}}"><div class="column has-text-white"><i class="fas fa-envelope-open-text mr-1"></i>Contact</div></a>
-                    <a href="{{ path('legalNotice')}}"><div class="column has-text-white"><i class="fas fa-balance-scale mr-1"></i>Mentions légales</div></a>
-                </div>
-            </div>
+    <section class="container">
+    <div class="columns footer is-centered is-multiline has-text-white">
+        <div class="column is-3 is-6-mobile is-centered responsive-img rounded-1 has-text-centered">
+          <img src="{{ asset('assets/img/footer-img.png') }}">
+        </div>
+        <div class ="column is-6">
+          <a href="{{ path('about')}}"><i class="fas fa-users mr-1"></i>Qui sommes nous ?</a><br>
+          <a href="{{ path('faq')}}"><i class="fas fa-question-circle mr-1"></i>FAQ</a><br>
+          <a href="{{ path('contact')}}"><i class="fas fa-envelope-open-text mr-1"></i>Contact</a><br>
+          <a href="{{ path('legalNotice')}}"><i class="fas fa-balance-scale mr-1"></i>Mentions légales</a><br>
+        </div>
 		</div>
-    </div>
+    </section>
     {% endblock %}
     {% block javascripts %}
     <script src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
