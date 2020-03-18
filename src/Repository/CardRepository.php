@@ -54,7 +54,7 @@ class CardRepository extends ServiceEntityRepository
      * @param Project $project
      * @return Card[]
      */
-    public function findCardsByProjectStatusNew($project)
+    public function findCardsByProjectStatus($project, $status)
     {
         $query = $this->getEntityManager()->createQuery('
             SELECT c, p 
@@ -65,7 +65,7 @@ class CardRepository extends ServiceEntityRepository
             ORDER BY c.createdAt DESC
         ')
         ->setParameter('project', $project)
-        ->setParameter('status', 'new');
+        ->setParameter('status', $status);
         return $query->getResult(); 
     }
 }

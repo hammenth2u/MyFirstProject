@@ -19,15 +19,33 @@ class ProjectController extends AbstractController
     public function showProject(Project $project, Request $request) : Response
     {
         $user = $this->getUser();
+        $status = null;
 
         $access = $this->getDoctrine()->getRepository(Access::class)->findAccessByUserAndProject($user, $project);
 
         //vérification des accès
         if ($access != null) {
 
-        $projectName = $project->getName();
+        // Récupération des cartes
+        $cardsNew = $this->getDoctrine()->getRepository(Card::class)->findCardsByProjectStatus($project, 'new');
+        $cardsInProgress = $this->getDoctrine()->getRepository(Card::class)->findCardsByProjectStatus($project, 'inProgress');
+        $cardsFinished = $this->getDoctrine()->getRepository(Card::class)->findCardsByProjectStatus($project, 'finished');
 
-        $cardsNew = $this->getDoctrine()->getRepository(Card::class)->findCardsByProjectStatusNew($project);
+        // Gestion de la récupération du status des tâches
+        if (isset($_GET['t']))
+        {
+            $status = $_GET['t'];
+
+            if (($status != 'new') && ($status != 'inProgress') && ($status != 'finished'))
+            {
+                // Status non valide, on redirige
+                $status = null;
+                return $this->redirectToRoute('showProject', ['id' => $project->getId() ]);
+            }
+        }
+        else {
+            $status = null;
+        }
 
         // Formulaire de création d'une nouvelle tâche
         $card = new Card();
@@ -48,9 +66,12 @@ class ProjectController extends AbstractController
        }
 
             return $this->render('project/index.html.twig', [
-                'projectName' => $projectName,
-                'cardForm'    => $cardForm->createView(),
-                'cardsNew'       => $cardsNew
+                'project'               => $project,
+                'cardForm'              => $cardForm->createView(),
+                'cardsNew'              => $cardsNew,
+                'cardsInProgress'       => $cardsInProgress,
+                'cardsFinished'         => $cardsFinished,
+                'status'                => $status
             ]);
         } else {
             // Accès non autorisé

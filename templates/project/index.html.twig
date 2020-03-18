@@ -6,10 +6,10 @@
 <section class="container">
 <div class="columns has-text-centered is-multiline">
    <div class="column dashboard is-full has-text-centered">
-        <i class="fas fa-tasks mr-1"></i></i>Tâches
+        <i class="fas fa-tasks mr-1"></i></i>Projets > {{ project.name }}
     </div>
 
-    <div class="column task has-background-grey-lighter has-text-grey-dark">
+    <div class="column task has-background-grey-lighter has-text-grey-dark" s-type="new">
         <nav class="level">
          <div class="level-item has-text-centered">
          <div>
@@ -19,34 +19,80 @@
         </div>
     </div>
 
-    <div class="column task has-background-warning has-text-grey-dark">
+    <div class="column task has-background-warning has-text-grey-dark" s-type="inProgress">
         <nav class="level">
          <div class="level-item has-text-centered">
          <div>
           <p class="heading">Tâches en cours</p>
-          <p class="title">0</p>
+          <p class="title">{{ cardsInProgress|length }}</p>
          </div>
         </div>
     </div>
 
-    <div class="column task has-background-success has-text-grey-dark">
+    <div class="column task has-background-success has-text-grey-dark" s-type="finished">
         <nav class="level">
          <div class="level-item has-text-centered">
          <div>
           <p class="heading">Tâches terminées</p>
-          <p class="title">0</p>
+          <p class="title">{{ cardsFinished|length }}</p>
          </div>
         </div>
     </div>
 
+<div class="column is-12">
+{# Préparation des différentes variables #}
+{% if status != null %}
+ {% if status == 'new' %}
+   {% set color = 'is-grey-lighter' %}
+   {% set cards = cardsNew %}
+   {% set type = 'créées' %}
+ {% elseif status == 'inProgress' %}
+   {% set color = 'is-warning' %}
+   {% set cards = cardsInProgress %}
+   {% set type = 'en cours' %}
+ {% elseif status == 'finished'%}
+   {% set color = 'is-success' %}
+   {% set cards = cardsFinished %}
+   {% set type = 'terminées' %}
+{% endif %}
+
+{% if cards|length > 0 %}
+   <article class="panel {{ color }}">
+      <p class="panel-heading">
+         Tâches {{ type }}
+      </p>
+      <div class="panel-block">
+         <p class="control has-icons-left">
+            <input class="input is-primary" type="text" placeholder="Search">
+            <span class="icon is-left">
+            <i class="fas fa-search" aria-hidden="true"></i>
+            </span>
+         </p>
+      </div>
+      {% for card in cards  %}
+      <a class="panel-block">
+         <span class="panel-icon">
+            <i class="fas fa-book" aria-hidden="true"></i>
+         </span>
+          {{ card.name }}
+      </a>
+      {% endfor %}
+    </article>
    </div>
-   <div class="column is-full has-text-centered">
-    {#% for userProject in userProjects %}
-        <li>{{ userProject.name }}</li>
-    {% else %#}
-   <i class="fas fa-exclamation-circle mr-1"></i>Aucune tâche
-   {#% endfor %#}
-   </div>
+{% else %}
+Aucune tâche dans cette catégorie
+{% endif %}
+{% endif %}
+
+{% if ((status == null) and (cardsNew == null) and (cardsInProgress == null) and (cardsFinished == null))  %}
+Aucune tâche dans ce projet, cliquez ci-dessous pour en créer une
+{% endif %}
+
+{% if ((status == null) and ((cardsNew != null) or (cardsInProgress != null) or (cardsFinished != null)))  %}
+Cliquez sur l'une des catégories ci-dessus pour afficher les différentes tâches
+{% endif %}
+
+</div>
    <div class="column has-text-centered is-centered">
    <button id="modal" class="button is-danger is-rounded"><i class="fas fa-plus mr-1"></i>Créer une nouvelle tâche</button>
    </div>
@@ -98,6 +144,11 @@ $("#modal").click(function() {
 
 $(".close").click(function() {
    $(".modal").removeClass("is-active");
+});
+
+$(".task").click(function() {
+   let statusType = jQuery(this).attr("s-type");
+   window.location.href="http://127.0.0.1:8001/p/{{ project.id }}?t=" + statusType; 
 });
 </script>
 
