@@ -70,7 +70,7 @@
          </p>
       </div>
       {% for card in cards  %}
-      <a class="panel-block">
+      <a class="panel-block" task-id="{{ card.id }}">
          <span class="panel-icon">
             <i class="fas fa-tasks" aria-hidden="true"></i>
          </span>
@@ -79,6 +79,7 @@
       {% endfor %}
     </article>
    </div>
+
 {% else %}
 Aucune tâche dans cette catégorie
 {% endif %}
@@ -150,6 +151,37 @@ $(".task").click(function() {
    let statusType = jQuery(this).attr("s-type");
    window.location.href="http://127.0.0.1:8001/p/{{ project.id }}?t=" + statusType; 
 });
+
+// Affichage des tasks
+$(".panel-block").click(function() {
+   let cardID = jQuery(this).attr("task-id");
+
+ $.ajax({
+            url: '/getCardData', 
+            method: 'POST', 
+            dataType: 'json',
+            data: {
+                    cardID,
+                  }
+            }).done(function(response) {
+                if (response['Error'] == 'Accès non autorisé') {
+                   // Afficher un pop up d'erreur ?
+                }
+  
+                if (response['cardDetails'] !== undefined) {
+                    let responseHTML = '';
+                    $.each(response, function(i, item) {
+                        /*icoName = app.replaceInString(response[i].name);
+                        responseHTML += '<a href="c/' + response[i].name + '"><div class="result-content"><img class="mr-1 ico" src="assets/img/ico/' + icoName + '.ico">' + response[i].category_full_name + '</div></a>';*/
+                    })
+                    //$('body').html(responseHTML);
+                }
+  
+            }).fail(function() {
+                //$('.result-search-content').html('Erreur de chargement');
+            });
+});
+
 </script>
 
 {% endblock %}

@@ -19,8 +19,6 @@ class ProjectRepository extends ServiceEntityRepository
         parent::__construct($registry, Project::class);
     }
 
-
-    
     /*
     public function findOneBySomeField($value): ?Project
     {

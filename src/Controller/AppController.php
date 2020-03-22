@@ -59,8 +59,6 @@ class AppController extends AbstractController
             return $this->redirectToRoute('dashboard');
         }
 
-        dump($userProjects);
-
          return $this->render('app/dashboard.html.twig', [
              'controller_name' => 'AppController',
              'userProjects'    => $userProjects,

@@ -28,7 +28,6 @@ class LabelController extends AbstractController
             $entityManager->persist($label);
             $entityManager->flush();
 
-
             return $this->redirectToRoute('add_label');
         }
 

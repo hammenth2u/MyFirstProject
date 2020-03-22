@@ -49,7 +49,7 @@ class CardRepository extends ServiceEntityRepository
     */
     
     /**
-     * Méthode qui retourne les tâches pour un projet donnée
+     * Méthode qui retourne les tâches pour un projet donné
      * 
      * @param Project $project
      * @return Card[]
