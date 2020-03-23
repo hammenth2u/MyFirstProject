@@ -5,8 +5,8 @@
 {% block body %}
 <section class="container">
 <div class="columns has-text-centered is-multiline">
-   <div class="column dashboard is-full has-text-centered">
-        <i class="fab fa-product-hunt mr-1"></i>Projets > {{ project.name }}
+   <div class="column dashboard is-full has-text-centered is-size-4">
+        <i class="fab fa-product-hunt mr-1"></i>Projets > {{ project.name }} <button class="button is-info" data-show="quickview" data-target="quickviewDefault"><i class="fas fa-user-friends"></i></button>
     </div>
 
     <div class="column task has-background-grey-lighter has-text-grey-dark" s-type="new">
@@ -138,7 +138,30 @@ Cliquez sur l'une des catégories ci-dessus pour afficher les différentes tâch
   </div>
 </div>
 
+<div id="quickviewDefault" class="quickview">
+  <header class="quickview-header">
+    <p class="title">Utilisateurs</p>
+    <span class="delete" data-dismiss="quickview"></span>
+  </header>
+
+  <div class="quickview-body has-text-dark">
+    <div class="quickview-block">
+        {% for user in listUsers %}
+        {{ user.0 }}
+        {% endfor %}
+    </div>
+  </div>
+
+  <footer class="quickview-footer">
+
+  </footer>
+</div>
+
+<script src="{{ asset('assets/js/quickview.js') }}"></script>
+
 <script>
+var quickviews = bulmaQuickview.attach(); // quickview
+
 $("#modal").click(function() {
   $(".modal").addClass("is-active");  
 });
@@ -174,7 +197,7 @@ $(".card").click(function() {
                     let responseHTML = '';
 
                      responseHTML += 
-                     '<div class="modal is-active">'
+                     '<div class="modal has-text-dark currentCard is-active">'
                      + '<div class="modal-background"></div>'
                      + '<div class="modal-card">'
                      +   '<header class="modal-card-head">'
@@ -195,7 +218,7 @@ $(".card").click(function() {
 
                      // Refresh event
                      $(".close").click(function() {
-                        $(".modal").removeClass("is-active");
+                        $(".currentCard").remove();
                      });
                   }
   

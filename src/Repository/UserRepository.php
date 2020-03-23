@@ -39,12 +39,13 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     // /**
     //  * @return User[] Returns an array of User objects
     //  */
+    
     /*
-    public function findByExampleField($value)
+    public function findUsersByProject($project)
     {
         return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('u.project = :project')
+            ->setParameter('project', $project)
             ->orderBy('u.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
@@ -52,6 +53,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ;
     }
     */
+
 
     /*
     public function findOneBySomeField($value): ?User

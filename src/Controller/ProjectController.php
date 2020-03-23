@@ -21,6 +21,17 @@ class ProjectController extends AbstractController
         $user = $this->getUser();
         $status = null;
 
+
+        //Pour retourner la liste des utilisateurs d'un projet
+        $accesses = $project->getAccesses();
+        $listUsers = [];
+        foreach($accesses as $currentAccess){
+            $listUsers [] = [
+                $currentAccess->getUser()->getEmail()
+            ];
+        }
+        
+
         $access = $this->getDoctrine()->getRepository(Access::class)->findAccessByUserAndProject($user, $project);
 
         //vérification des accès
@@ -71,7 +82,8 @@ class ProjectController extends AbstractController
                 'cardsNew'              => $cardsNew,
                 'cardsInProgress'       => $cardsInProgress,
                 'cardsFinished'         => $cardsFinished,
-                'status'                => $status
+                'status'                => $status,
+                'listUsers'             => $listUsers
             ]);
         } else {
             // Accès non autorisé
