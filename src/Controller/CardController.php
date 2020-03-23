@@ -7,11 +7,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Access;
 use App\Entity\Card;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+
 
 class CardController extends AbstractController
 {
     /**
-     * Méthode permettant de renvoyer les infos d'une card lors d'un clic sur une des card d'un projet
+     * Méthode permettant de renvoyer les données d'une card lors d'un clic sur une des tâches d'un projet
      * 
      * @Route("/getCardData", name="getCardData", methods={"POST"})
      */
@@ -26,6 +29,8 @@ class CardController extends AbstractController
 
         // Vérification des accès
         $access = $this->getDoctrine()->getRepository(Access::class)->findAccessByUserAndProject($this->getUser(), $cardDetails->getProject()->getId());
+
+        dump($cardDetails);
 
         if ($access != null) {
             // Accès autorisé
