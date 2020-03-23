@@ -9,6 +9,7 @@ use App\Entity\Access;
 use App\Entity\Card;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 class CardController extends AbstractController
@@ -20,6 +21,10 @@ class CardController extends AbstractController
      */
     public function getCardData() : Response
     {
+        header('Access-Control-Allow-Origin: *'); 
+        header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS'); 
+        header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
+
         $cardID = $_POST['cardID'];   
 
         // Récupération des informations liées à la card
@@ -30,14 +35,22 @@ class CardController extends AbstractController
         // Vérification des accès
         $access = $this->getDoctrine()->getRepository(Access::class)->findAccessByUserAndProject($this->getUser(), $cardDetails->getProject()->getId());
 
-        dump($cardDetails);
-
+        
         if ($access != null) {
             // Accès autorisé
-            $response = new Response();
-            $response->setContent(json_encode(array('cardDetails' => $cardDetails)));
-            $response->headers->set('Content-Type', 'application/json');
-            return $response;
+            // $response = new Response();
+            // $response->setContent(json_encode(array('cardDetails' => $cardDetails)));
+            // $response->headers->set('Content-Type', 'application/json');
+            // return $response;
+            $formatted = [];
+            $formatted [] = [
+               'id' => $cardDetails->getId(),
+               'name' => $cardDetails->getName(),
+               'description' => $cardDetails->getDescription(),
+            ];
+        
+        return new JsonResponse($formatted);
+
         }
         else {
             // Accès non autorisé
