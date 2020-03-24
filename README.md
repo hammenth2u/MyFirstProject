@@ -9,5 +9,5 @@
 * Liste des utilisateurs => quand on clique ailleurs, il faut que ça ferme la fenêtre. (quickview)  
 * ~~Modifier le boutton déconnexion pour le faire en menu déroulant (avec petit avatar)~~  
 * Mettre un lien sur "projet" pour revenir à la dashboard  
-* Starter une tâche -> Prévoir une colonne started_by
+* Starter une tâche -> Prévoir une colonne started_by / started_at dans l'entity card
 * Drag & Drop sur les card
