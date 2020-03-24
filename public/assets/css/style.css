@@ -94,6 +94,18 @@ html {
     background-color: white;
 }
 
+.dropdown-menu {
+    left: auto;
+    right: 0;
+    width: 100%;
+}
+
+.flex {
+    display: flex;           
+    justify-content: center;
+    align-items: center;
+}
+
  /* Modifiers */
 
  .mr-1 {
