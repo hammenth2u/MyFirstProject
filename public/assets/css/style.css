@@ -106,6 +106,10 @@ html {
     align-items: center;
 }
 
+.drag {
+    width: 5em;
+}
+
  /* Modifiers */
 
  .mr-1 {
@@ -137,9 +141,8 @@ html {
      text-decoration: underline;
  }
 
- .right {
-     position: relative;
-    right: 0;
+ .flex-end {
+      justify-content: flex-end;
  }
 
  /* Quickview */

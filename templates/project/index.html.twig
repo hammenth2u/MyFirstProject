@@ -6,7 +6,7 @@
 <section class="container">
 <div class="columns has-text-centered is-multiline">
    <div class="column dashboard is-full has-text-centered flex is-size-5">
-        <i class="fab fa-product-hunt mr-1"></i>Projets > {{ project.name }} <button class="button is-info right ml-1" data-show="quickview" data-target="quickviewDefault"><i class="fas fa-user-friends"></i></button>
+        <i class="fab fa-product-hunt mr-1"></i>Projets > {{ project.name }} <button class="button is-info flex-end ml-1" data-show="quickview" data-target="quickviewDefault"><i class="fas fa-user-friends"></i></button>
     </div>
 
     <div class="column task has-background-grey-lighter has-text-grey-dark" s-type="new">
@@ -70,7 +70,7 @@
          </p>
       </div>
       {% for card in cards  %}
-      <a class="panel-block card" card-id="{{ card.id }}">
+      <a class="panel-block show-card" card-id="{{ card.id }}">
          <span class="panel-icon">
             <i class="fas fa-tasks" aria-hidden="true"></i>
          </span>
@@ -159,74 +159,12 @@ Cliquez sur l'une des catégories ci-dessus pour afficher les différentes tâch
 
 <script src="{{ asset('assets/js/quickview.js') }}"></script>
 
-<script>
-var quickviews = bulmaQuickview.attach(); // quickview
-
-$("#modal").click(function() {
-  $(".modal").addClass("is-active");  
-});
-
-$(".close").click(function() {
-   $(".modal").removeClass("is-active");
-});
-
-$(".task").click(function() {
-   let statusType = jQuery(this).attr("s-type");
-   window.location.href="http://127.0.0.1:8001/p/{{ project.id }}?t=" + statusType; 
-});
-
-// Affichage d'une card lors du click
-$(".card").click(function() {
-   let cardID = jQuery(this).attr("card-id");
-
- $.ajax({
-            url: '/getCardData', 
-            method: 'POST', 
-            dataType: 'json',
-            data: {
-                    cardID,
-                  }
-            }).done(function(response) {
-                if (response['Error'] == 'Accès non autorisé') {
-                   // Afficher un pop up d'erreur ?
-                }
-
-                console.log(response)
-  
-                if (response !== undefined) {
-                    let responseHTML = '';
-
-                     responseHTML += 
-                     '<div class="modal has-text-dark currentCard is-active">'
-                     + '<div class="modal-background"></div>'
-                     + '<div class="modal-card">'
-                     +   '<header class="modal-card-head">'
-                     +      '<p class="modal-card-title">' + response[0].name + '</p>'
-                     +      '<button class="delete close" aria-label="close"></button>'
-                     +   '</header>'
-                     +   '<section class="modal-card-body">'
-                     +      response[0].description
-                     +   '</section>'
-                     +   '<footer class="modal-card-foot">'
-                     +      '<button class="button is-success">Démarrer cette tâche</button>'
-                     +      '<button class="button close">Cancel</button>'
-                     +   '</footer>'
-                     + '</div>'
-                     +'</div>';
-                     
-                     $('body').append(responseHTML);
-
-                     // Refresh event
-                     $(".close").click(function() {
-                        $(".currentCard").remove();
-                     });
-                  }
-  
-            }).fail(function() {
-                //$('.result-search-content').html('Erreur de chargement');
-            });
-});
-
+<script
+  src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+  crossorigin="anonymous">
 </script>
+
+<script src="{{ asset('assets/js/project.js') }}"></script>
 
 {% endblock %}
