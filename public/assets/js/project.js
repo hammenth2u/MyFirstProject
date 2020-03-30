@@ -29,31 +29,46 @@ let app = {
     $(".show-card").draggable({
         revert : function(event , ui) {
             $(this).width(app.width);
+            $(this).removeClass('currentDrag')
         if(event) {
             return event;
+            
         }
         else
             return !event;
             
         },
         start: function( event, ui ) {
+            let pageY = event.pageY;
+            let pageX = event.pageX;
             app.width = $(this).width();
-            console.log(width);
-            $(this).width(50);
-        }
+            $(this).addClass('currentDrag')
+            $(this).width(50)
+        },
+        cursor: "move", cursorAt: { top: 56, left: 56 },
     });
 
     $(".task").droppable({
         valid: '.task',
         drop: function(event, ui) {
-            //$(this).css('background', 'rgb(0,200,0)');
-            let total = parseInt($(this).find('.title').text());
-            total = total + 1;
-            $(this).find('.title').html(total)
+            let status = $(this).closest('div.column').attr('s-type')
+            console.log(status)
+
+            if ((status == 'new') || (status == 'inProgress') || (status == 'finished'))
+            {
+                // Backend à prévoir
+
+                //
+                $('body').find('.currentDrag').remove()
+                let total = parseInt($(this).find('.title').text());
+                total = total + 1;
+                $(this).find('.title').html(total)
+                $(this).css("border", "none")
+            }
+
             },
         over: function(event, ui) {
             $(this).css("border", "2px solid #fff");
-            console.log($(this).closest('div.column').attr('s-type'))
             },
         out: function(event, ui) {
             $(this).css("border", "none")

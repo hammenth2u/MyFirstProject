@@ -110,6 +110,10 @@ html {
     width: 5em;
 }
 
+.currentDrag {
+    background-color: #00d1b2
+}
+
  /* Modifiers */
 
  .mr-1 {
