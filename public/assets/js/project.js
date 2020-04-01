@@ -16,7 +16,7 @@ let app = {
     });
 
     $(".modal-background").click(function() {
-        $(".modal").remove();
+        $(".modal").removeClass("is-active");
     });
 
     $(".task").click(function() {
@@ -26,37 +26,45 @@ let app = {
     window.location.href="http://127.0.0.1:8001/p/" + id + "?t=" + statusType; 
     });
 
+    // Préparation drag & drop
+    let currentStatusOnPage = $('body').find('p.panel-heading').attr('s-type')
+    $('body').find('.column[s-type="' + currentStatusOnPage + '"]').addClass('t')
+    $('body').find('.column[s-type="' + currentStatusOnPage + '"]').removeClass('task')
+    $('body').find('.column[s-type="' + currentStatusOnPage + '"]').find('p.heading').prepend('<i class="fas fa-arrow-right mr-1"></i>')
+
     $(".show-card").draggable({
-        revert : function(event , ui) {
-            $(this).width(app.width);
-            $(this).removeClass('currentDrag')
-        if(event) {
-            return event;
-            
-        }
-        else
-            return !event;
-            
-        },
         start: function( event, ui ) {
-            let pageY = event.pageY;
-            let pageX = event.pageX;
             app.width = $(this).width();
             $(this).addClass('currentDrag')
             $(this).width(50)
+            $('body').find('.column[s-type="' + currentStatusOnPage + '"]').addClass('background-is-red')
+            $('body').find('.column[s-type="' + currentStatusOnPage + '"]').removeClass('task')
         },
+        revert : function(event , ui) {
+            $(this).width(app.width);
+            $(this).removeClass('currentDrag')
+            $('body').find('.column[s-type="' + currentStatusOnPage + '"]').removeClass('background-is-red')
+
+            if(event) {
+                return event;
+                
+            }
+            else
+                return !event;
+                
+            },
         cursor: "move", cursorAt: { top: 56, left: 56 },
     });
 
     $(".task").droppable({
         valid: '.task',
         drop: function(event, ui) {
+            
             let status = $(this).closest('div.column').attr('s-type')
-            console.log(status)
 
             if ((status == 'new') || (status == 'inProgress') || (status == 'finished'))
             {
-                // Backend à prévoir
+                // Backend + ajax à prévoir
 
                 //
                 $('body').find('.currentDrag').remove()
@@ -68,7 +76,7 @@ let app = {
 
             },
         over: function(event, ui) {
-            $(this).css("border", "2px solid #fff");
+            $(this).css("border", "5px solid #fff");
             },
         out: function(event, ui) {
             $(this).css("border", "none")

@@ -51,6 +51,13 @@ html {
     padding: 4em;
     margin: 1em;
     cursor: pointer;
+    border: 5px solid transparent;
+}
+
+.t {
+    padding: 4em;
+    margin: 1em;
+    border: 5px solid transparent
 }
 
 .img-responsive {
@@ -147,6 +154,11 @@ html {
 
  .flex-end {
       justify-content: flex-end;
+ }
+
+ .background-is-red {
+     background-color: red !important;
+     cursor: not-allowed;
  }
 
  /* Quickview */

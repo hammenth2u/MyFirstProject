@@ -13,7 +13,7 @@
         <nav class="level">
          <div class="level-item has-text-centered">
          <div>
-          <p class="heading">Tâches créées</p>
+          <p class="heading is-size-6">Tâches créées</p>
           <p class="title">{{ cardsNew|length }}</p>
          </div>
         </div>
@@ -23,7 +23,7 @@
         <nav class="level">
          <div class="level-item has-text-centered">
          <div>
-          <p class="heading">Tâches en cours</p>
+          <p class="heading is-size-6">Tâches en cours</p>
           <p class="title">{{ cardsInProgress|length }}</p>
          </div>
         </div>
@@ -33,7 +33,7 @@
         <nav class="level">
          <div class="level-item has-text-centered">
          <div>
-          <p class="heading">Tâches terminées</p>
+          <p class="heading is-size-6">Tâches terminées</p>
           <p class="title">{{ cardsFinished|length }}</p>
          </div>
         </div>
@@ -58,7 +58,7 @@
 
 {% if cards|length > 0 %}
    <article class="panel {{ color }}">
-      <p class="panel-heading">
+      <p class="panel-heading" s-type="{{ status }}">
          Tâches {{ type }}
       </p>
       <div class="panel-block">
@@ -153,7 +153,6 @@ Cliquez sur l'une des catégories ci-dessus pour afficher les différentes tâch
   </div>
 
   <footer class="quickview-footer">
-
   </footer>
 </div>
 
