@@ -130,14 +130,26 @@ let app = {
                         responseHTML += 
                         '<div class="modal has-text-dark currentCard is-active">'
                         + '<div class="modal-background"></div>'
-                        + '<div class="modal-card">'
+                        + '<div class="modal-card-big">'
                         +   '<header class="modal-card-head">'
-                        +      '<p class="modal-card-title">' + response[0].name + '</p>'
+                        +      '<p class="modal-card-title"><i class="fas fa-tasks mr-1"></i>' + response[0].name + '</p>'
                         +      '<button class="delete close" aria-label="close"></button>'
                         +   '</header>'
-                        +   '<section class="modal-card-body">'
-                        +      response[0].description
-                        +   '</section>'
+                        +   '<div class="columns is-multiline has-text-centered nm">'
+                        +       '<div class="column is-6 col-t">'
+                        +           '<p class="is-size-5 mb-2"><i class="fas fa-align-left mr-1"></i>Description</p>'
+                        +           '<p class="is-size-6">' + response[0].description + '</p>'
+                        +       '</div>'
+                        +       '<div class="column is-6 col-t is-size-5">'
+                        +           '<p><i class="fas fa-tags mr-1"></i>Etiquettes</p>'
+                        +       '</div>'
+                        +       '<div class="column is-12 col-t is-size-5">'
+                        +           '<p><i class="far fa-check-square mr-1"></i></i>Etapes</p>'
+                        +       '</div>'
+                        +       '<div class="column is-12 col-t is-size-5 mb-test">'
+                        +           '<p><i class="fas fa-comment mr-1"></i></i></i>Commentaires</p>'
+                        +       '</div>'
+                        +   '</div>'
                         +   '<footer class="modal-card-foot">'
                         +      '<button class="button is-success">Démarrer cette tâche</button>'
                         +      '<button class="button close">Fermer</button>'
@@ -155,6 +167,7 @@ let app = {
                         $(".modal-background").click(function() {
                             $(".currentCard").remove();
                         });
+                        //
                      }
         
                     }).fail(function() {

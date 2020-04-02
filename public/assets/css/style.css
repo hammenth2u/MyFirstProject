@@ -38,6 +38,16 @@ html {
     }
 }
 
+.modal-card-big {
+    /*min-height: calc(100vh - 40px);*/
+    min-width: calc(80vw - 40px);
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1;
+}
+
 .dashboard {
     border: 1px solid lightgray;
     border-radius: 4px;
@@ -121,6 +131,10 @@ html {
     background-color: #00d1b2
 }
 
+.col-t {
+    background-color: #fff;
+}
+
  /* Modifiers */
 
  .mr-1 {
@@ -138,6 +152,14 @@ html {
  .mb-1 {
      margin-bottom: 0.4rem;
  }
+
+ .mb-2 {
+    margin-bottom: 0.8rem;
+}
+
+.mb-test {
+    margin-bottom: 20rem;
+}
 
  .is-centered {
     margin-right: auto;
@@ -159,6 +181,10 @@ html {
  .background-is-red {
      background-color: rgb(194, 36, 60) !important;
      cursor: not-allowed;
+ }
+
+ .nm {
+     margin: 0 !important;
  }
 
  /* Quickview */
