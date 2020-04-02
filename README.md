@@ -5,9 +5,8 @@
 * Starter une tâche -> Prévoir une colonne started_by / started_at dans l'entity card
 * Faire une table history -> relier au projet  
 * Faire une table steps -> Pour les étapes liées à une tâche
-* Faire une fonction pour créer le lien d'invitation au projet => redirection sur la page login/register  
 * Les 2 formulaires sur la même page ? (login/register)
-* Invitation à rejoindre un projet (lié au token sur le projet) -> Prévoir une nouvelle page pour permettre de rejoindre le projet + création de l'accès pour l'utilisateur
+* Invitation à rejoindre un projet (lié au token sur le projet) -> Prévoir une nouvelle page pour permettre de rejoindre le projet + création de l'accès pour l'utilisateur ( redirection sur la page login/register si non connecté)
 * User -> inscription ->username ! / Modifier non pas liste d'email mais username sur le projet  
 * Liste des utilisateurs => quand on clique ailleurs, il faut que ça ferme la fenêtre. (quickview)  
 * ~~Modifier le boutton déconnexion pour le faire en menu déroulant (avec petit avatar)~~  
