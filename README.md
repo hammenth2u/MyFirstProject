@@ -13,6 +13,6 @@
 * Mettre un lien sur "projet" pour revenir à la dashboard  
 * Starter une tâche -> Prévoir une colonne started_by / started_at dans l'entity card
 * Drag & Drop sur les cards -> Reste le back + requêtes ajax + repositionner les cards dans le même bloc : jQuery sortable ?
-* Avancer sur l'affichage d'une tâche côté front : Ajout de la partie commentaire / étapes / 
+* Avancer sur l'affichage d'une tâche côté front : Ajout de la partie commentaire / étapes / labels en full jQuery/ajax
 * Migrer le formulaire "Ajouter une tâche" en jQuery/ajax
 * Migrer la récup/affichage des tâches en jQuery/ajax et plus en $_GET via php
