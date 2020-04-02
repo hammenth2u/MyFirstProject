@@ -42,7 +42,16 @@ class AppController extends AbstractController
 
             // Il faudra générer un identifiant unique pour le projet (à voir plus tard pour éviter project/0 -> project/wxzREdf2sd)
         
+            $user = $this->getUser();
+            $userId = $user->getId();
+
             $project->setUser($this->getUser());
+            //Generate a random string.
+            $token = openssl_random_pseudo_bytes(16);
+            
+            //Convert the binary data into hexadecimal representation.
+            $token = bin2hex($token);
+            $project->setToken($token.$userId);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($project);
             $entityManager->flush();

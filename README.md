@@ -1,7 +1,7 @@
 # Project-1
 
-* Rajouter le token sur le projet (string, unique)/ Entity  
-* Rajouter username et avatar sur User /Entity  
+* Rajouter le token sur le projet (string, unique)/ Entity / ok mais faut mettre un vrai token
+* Rajouter username et avatar sur User /Entity   / ok mais nullable pour l'instant
 * Starter une tâche -> Prévoir une colonne started_by / started_at dans l'entity card
 * Faire une table history -> relier au projet  
 * Faire une table steps -> Pour les étapes liées à une tâche

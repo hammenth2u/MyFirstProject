@@ -10,6 +10,7 @@ use App\Entity\Card;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 
 class CardController extends AbstractController
@@ -55,5 +56,30 @@ class CardController extends AbstractController
             $response->headers->set('Content-Type', 'application/json');
             return $response;
         }
+    }
+
+    /**
+     * Méthode permettant de renvoyer les données d'une card lors d'un clic sur une des tâches d'un projet
+     * 
+     * @Route("/changeCardStatus", name="changeCardStatus", methods={"POST"})
+     */
+    public function changeCardStatus(Request $request)
+    {
+
+        if($request->request->get('idCard')){
+            $idCard = $request->request->get('idCard');
+        }
+        $card = $this->getDoctrine()->getRepository(Card::class)->find($idCard);
+
+        if($request->request->get('status')){
+            $status = $request->request->get('status');
+            $card->setStatus($status);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($card);
+        $em->flush();
+
+        return new Response('statut modifié');
     }
 }

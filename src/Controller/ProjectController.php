@@ -73,7 +73,16 @@ class ProjectController extends AbstractController
            $entityManager->persist($card);
            $entityManager->flush();
 
-           return $this->redirectToRoute('showProject', ['id' => $project->getId() ]);
+
+           
+           $pathInfo = $request->getPathInfo();
+           $requestUri = $request->getRequestUri();
+
+           $url = str_replace($pathInfo, rtrim($pathInfo, ' /'), $requestUri);
+
+           return $this->redirect($url, 301);
+
+           //return $this->redirectToRoute('showProject', ['id' => $project->getId() ]);
        }
 
             return $this->render('project/index.html.twig', [

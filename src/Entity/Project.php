@@ -53,6 +53,11 @@ class Project
      */
     private $accesses;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $token;
+
     public function __construct()
     {
         $this->cards = new ArrayCollection();
@@ -208,6 +213,18 @@ class Project
                 $access->setProject(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(string $token): self
+    {
+        $this->token = $token;
 
         return $this;
     }

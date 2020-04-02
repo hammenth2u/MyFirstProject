@@ -1,11 +1,10 @@
 let app = {
-    // #######################################################################
-    // init function
-    // #######################################################################
+
     init: function() {
 
     let quickviews = bulmaQuickview.attach(); // quickview
     let width;
+    let cardID;
 
     $("#modal").click(function() {
     $(".modal").addClass("is-active");  
@@ -35,6 +34,7 @@ let app = {
     $(".show-card").draggable({
         start: function( event, ui ) {
             app.width = $(this).width();
+            app.cardID = $(this).attr('card-id');
             $(this).addClass('currentDrag')
             $(this).width(50)
             $('body').find('.column[s-type="' + currentStatusOnPage + '"]').addClass('background-is-red')
@@ -45,7 +45,7 @@ let app = {
             $(this).removeClass('currentDrag')
             $('body').find('.column[s-type="' + currentStatusOnPage + '"]').removeClass('background-is-red')
 
-            if(event) {
+            if (event) {
                 return event;
                 
             }
@@ -61,16 +61,33 @@ let app = {
         drop: function(event, ui) {
             
             let status = $(this).closest('div.column').attr('s-type')
+            idCard = app.cardID
 
             if ((status == 'new') || (status == 'inProgress') || (status == 'finished'))
             {
-                // Backend + ajax à prévoir
+                $.ajax({
+                    url: '/changeCardStatus', 
+                    method: 'POST', 
+                    dataType: 'json',
+                    data: {
+                            idCard,
+                            status
+                          }
+                    }).done(function(response) {
 
+                });
                 //
                 $('body').find('.currentDrag').remove()
+                // Incrémentation compteur destination
                 let total = parseInt($(this).find('.title').text());
                 total = total + 1;
                 $(this).find('.title').html(total)
+
+                // Décrémentation compteur tâche courante
+                total = $('body').find('.column[s-type="' + currentStatusOnPage + '"]').find('.title').text()
+                total = total - 1;
+                $('body').find('.column[s-type="' + currentStatusOnPage + '"]').find('.title').html(total)
+
                 $(this).css("border", "none")
             }
 
