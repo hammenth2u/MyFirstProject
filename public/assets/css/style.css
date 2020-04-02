@@ -157,7 +157,7 @@ html {
  }
 
  .background-is-red {
-     background-color: red !important;
+     background-color: rgb(194, 36, 60) !important;
      cursor: not-allowed;
  }
 
