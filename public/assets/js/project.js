@@ -5,6 +5,7 @@ let app = {
     let quickviews = bulmaQuickview.attach(); // quickview
     let width;
     let cardID;
+    let descriptionContent;
 
     $("#modal").click(function() {
     $(".modal").addClass("is-active");  
@@ -138,7 +139,7 @@ let app = {
                         +   '<div class="columns is-multiline has-text-centered nm">'
                         +       '<div class="column is-6 col-t">'
                         +           '<p class="is-size-5 mb-2"><i class="fas fa-align-left mr-1"></i>Description</p>'
-                        +           '<p class="is-size-6">' + response[0].description + '</p>'
+                        +           '<p class="is-size-6 descriptionContent description">' + response[0].description + '</p>'
                         +       '</div>'
                         +       '<div class="column is-6 col-t is-size-5">'
                         +           '<p><i class="fas fa-tags mr-1"></i>Etiquettes</p>'
@@ -168,12 +169,43 @@ let app = {
                             $(".currentCard").remove();
                         });
                         //
+
+                        // ADD events
+                        $('.descriptionContent').on('click', app.addEventModifyDescription);
                      }
         
                     }).fail(function() {
                         //$('.result-search-content').html('Erreur de chargement');
                     });
-    }
+    },
+
+    addEventModifyDescription : function() {
+
+        app.descriptionContent = $('.modal-card-big').find('.descriptionContent').text();
+        $('.modal-card-big').find('.descriptionContent').html(
+        '<div class="control">'
+        +  '<textarea class="textarea is-focused" placeholder="Description">' + app.descriptionContent + '</textarea>'
+        + '</div>')
+
+        $(this).unbind('click')
+        $(this).removeClass('descriptionContent')
+
+        $(window).click(function (event) {
+            if (!$(event.target).closest(".description").length) {
+                // Unbind click
+                $(window).unbind('click');
+                // Récupération contenu textarea
+                app.descriptionContent = $('.modal-card-big').find('.textarea').val();
+                // Suppression du DOM
+                $('.modal-card-big').find('.textarea').remove();
+                // Ajout du contenu dans le DOM
+                $('.modal-card-big').find('.description').html(app.descriptionContent);
+                $('.modal-card-big').find('.description').addClass('descriptionContent');
+                // Refresh event
+                $('.descriptionContent').click(app.addEventModifyDescription);
+            }
+        });
+},
 };
 
 $(app.init);
