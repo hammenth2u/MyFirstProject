@@ -138,8 +138,8 @@ let app = {
                         +   '</header>'
                         +   '<div class="columns is-multiline has-text-centered nm">'
                         +       '<div class="column is-6 col-t">'
-                        +           '<p class="is-size-5 mb-2"><i class="fas fa-align-left mr-1"></i>Description</p>'
-                        +           '<p class="is-size-6 descriptionContent description">' + response[0].description + '</p>'
+                        +           '<p class="is-size-5 mb-2"><i class="fas fa-align-left mr-1"></i>Description<button class="button is-small is-info description-area descriptionContent btn-m-description ml-1">Modifier</button></p>'
+                        +           '<p class="is-size-6 descriptionContent description-area description">' + response[0].description + '</p>'
                         +       '</div>'
                         +       '<div class="column is-6 col-t is-size-5">'
                         +           '<p><i class="fas fa-tags mr-1"></i>Etiquettes</p>'
@@ -181,31 +181,60 @@ let app = {
 
     addEventModifyDescription : function() {
 
-        app.descriptionContent = $('.modal-card-big').find('.descriptionContent').text();
-        $('.modal-card-big').find('.descriptionContent').html(
+        app.descriptionContent = $('.modal-card-big').find('.description').text();
+        $('.modal-card-big').find('.description').html(
         '<div class="control">'
-        +  '<textarea class="textarea is-focused" placeholder="Description">' + app.descriptionContent + '</textarea>'
+        +  '<textarea class="textarea description-area is-focused" placeholder="Description">' + app.descriptionContent + '</textarea>'
         + '</div>')
 
-        $(this).unbind('click')
-        $(this).removeClass('descriptionContent')
+        $('<div class="buttons description--buttons mt-1"><button class="button description--save is-success mr-1">Enregistrer</button><button class="button is-danger description--cancel">Annuler</button></div>').insertAfter('p.description-area');
+
+        let events = $('.modal-card-big').find('.descriptionContent');
+
+        $(events.each( function() {
+            $(this).unbind('click');
+            $(this).removeClass('descriptionContent')
+        }));
+
+        // Hide button
+        $('.btn-m-description').hide()
 
         $(window).click(function (event) {
-            if (!$(event.target).closest(".description").length) {
+
+            if ($(event.target).closest(".description--cancel").length) {
+                console.log('annuler clicked')
+                $(window).unbind('click');
+                $('.modal-card-big').find('.description--buttons').remove()
+                $('.modal-card-big').find('.description').html(app.descriptionContent);
+                $('.modal-card-big').find('.description').addClass('descriptionContent');
+                // Refresh event
+                $(events.each( function() {
+                    $(this).click(app.addEventModifyDescription);
+                }));
+                $('.btn-m-description').show()
+               return false;
+            }
+
+            else if ((!$(event.target).closest(".description-area").length) || ($(event.target).closest(".description--save").length)) {
+                console.log('clicked outside textarea')
                 // Unbind click
                 $(window).unbind('click');
                 // Récupération contenu textarea
                 app.descriptionContent = $('.modal-card-big').find('.textarea').val();
                 // Suppression du DOM
                 $('.modal-card-big').find('.textarea').remove();
+                $('.modal-card-big').find('.description--buttons').remove()
                 // Ajout du contenu dans le DOM
                 $('.modal-card-big').find('.description').html(app.descriptionContent);
                 $('.modal-card-big').find('.description').addClass('descriptionContent');
                 // Refresh event
-                $('.descriptionContent').click(app.addEventModifyDescription);
+                $(events.each( function() {
+                    $(this).click(app.addEventModifyDescription);
+                }));
+                $('.btn-m-description').show()  
             }
         });
-},
+    },
 };
 
 $(app.init);
