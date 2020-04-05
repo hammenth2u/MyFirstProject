@@ -39,7 +39,7 @@
         </div>
     </div>
 
-<div class="column is-12">
+<div class="column is-12 pt-1 npb">
 {# Préparation des différentes variables #}
 {% if status != null %}
  {% if status == 'new' %}
@@ -81,20 +81,20 @@
    </div>
 
 {% else %}
-Aucune tâche dans cette catégorie
+<p class="mb-1">Aucune tâche dans cette catégorie</p>
 {% endif %}
 {% endif %}
 
 {% if ((status == null) and (cardsNew == null) and (cardsInProgress == null) and (cardsFinished == null))  %}
-Aucune tâche dans ce projet, cliquez ci-dessous pour en créer une
+<p class="mb-1">Aucune tâche dans ce projet, cliquez ci-dessous pour en créer une</p>
 {% endif %}
 
 {% if ((status == null) and ((cardsNew != null) or (cardsInProgress != null) or (cardsFinished != null)))  %}
-Cliquez sur l'une des catégories ci-dessus pour afficher les différentes tâches
+<p class="mb-1">Cliquez sur l'une des catégories ci-dessus pour afficher les différentes tâches</p>
 {% endif %}
 
 </div>
-   <div class="column has-text-centered is-centered">
+   <div class="column has-text-centered is-centered np">
    <button id="modal" class="button is-danger is-rounded"><i class="fas fa-plus mr-1"></i>Créer une nouvelle tâche</button>
    </div>
 </div>

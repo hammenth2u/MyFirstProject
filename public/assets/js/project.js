@@ -22,29 +22,29 @@ let app = {
     $(".task").click(function() {
     let statusType = jQuery(this).attr("s-type");
     let pathname = window.location.pathname.split("/");
-    let id = pathname[pathname.length-1]
+    let id = pathname[pathname.length-1];
     window.location.href="http://127.0.0.1:8001/p/" + id + "?t=" + statusType; 
     });
 
     // Préparation drag & drop
-    let currentStatusOnPage = $('body').find('p.panel-heading').attr('s-type')
-    $('body').find('.column[s-type="' + currentStatusOnPage + '"]').addClass('t')
-    $('body').find('.column[s-type="' + currentStatusOnPage + '"]').removeClass('task')
-    $('body').find('.column[s-type="' + currentStatusOnPage + '"]').find('p.heading').prepend('<i class="fas fa-arrow-right mr-1"></i>')
+    let currentStatusOnPage = $('body').find('p.panel-heading').attr('s-type');
+    $('body').find('.column[s-type="' + currentStatusOnPage + '"]').addClass('t');
+    $('body').find('.column[s-type="' + currentStatusOnPage + '"]').removeClass('task');
+    $('body').find('.column[s-type="' + currentStatusOnPage + '"]').find('p.heading').prepend('<i class="fas fa-arrow-right mr-1"></i>');
 
     $(".show-card").draggable({
         start: function( event, ui ) {
             app.width = $(this).width();
             app.cardID = $(this).attr('card-id');
-            $(this).addClass('currentDrag')
-            $(this).width(50)
-            $('body').find('.column[s-type="' + currentStatusOnPage + '"]').addClass('background-is-red')
-            $('body').find('.column[s-type="' + currentStatusOnPage + '"]').removeClass('task')
+            $(this).addClass('currentDrag');
+            $(this).width(50);
+            $('body').find('.column[s-type="' + currentStatusOnPage + '"]').addClass('background-is-red');
+            $('body').find('.column[s-type="' + currentStatusOnPage + '"]').removeClass('task');
         },
         revert : function(event , ui) {
             $(this).width(app.width);
-            $(this).removeClass('currentDrag')
-            $('body').find('.column[s-type="' + currentStatusOnPage + '"]').removeClass('background-is-red')
+            $(this).removeClass('currentDrag');
+            $('body').find('.column[s-type="' + currentStatusOnPage + '"]').removeClass('background-is-red');
 
             if (event) {
                 return event;
@@ -61,8 +61,8 @@ let app = {
         valid: '.task',
         drop: function(event, ui) {
             
-            let status = $(this).closest('div.column').attr('s-type')
-            idCard = app.cardID
+            let status = $(this).closest('div.column').attr('s-type');
+            idCard = app.cardID;
 
             if ((status == 'new') || (status == 'inProgress') || (status == 'finished'))
             {
@@ -78,18 +78,18 @@ let app = {
 
                 });
                 //
-                $('body').find('.currentDrag').remove()
+                $('body').find('.currentDrag').remove();
                 // Incrémentation compteur destination
                 let total = parseInt($(this).find('.title').text());
                 total = total + 1;
-                $(this).find('.title').html(total)
+                $(this).find('.title').html(total);
 
                 // Décrémentation compteur tâche courante
-                total = $('body').find('.column[s-type="' + currentStatusOnPage + '"]').find('.title').text()
+                total = $('body').find('.column[s-type="' + currentStatusOnPage + '"]').find('.title').text();
                 total = total - 1;
-                $('body').find('.column[s-type="' + currentStatusOnPage + '"]').find('.title').html(total)
+                $('body').find('.column[s-type="' + currentStatusOnPage + '"]').find('.title').html(total);
 
-                $(this).css("border", "none")
+                $(this).css("border", "none");
             }
 
             },
@@ -97,7 +97,7 @@ let app = {
             $(this).css("border", "5px solid #fff");
             },
         out: function(event, ui) {
-            $(this).css("border", "none")
+            $(this).css("border", "none");
         }
     });
 
@@ -185,7 +185,7 @@ let app = {
         $('.modal-card-big').find('.description').html(
         '<div class="control">'
         +  '<textarea class="textarea description-area is-focused" placeholder="Description">' + app.descriptionContent + '</textarea>'
-        + '</div>')
+        + '</div>');
 
         $('<div class="buttons description--buttons mt-1"><button class="button description--save is-success mr-1">Enregistrer</button><button class="button is-danger description--cancel">Annuler</button></div>').insertAfter('p.description-area');
 
@@ -193,37 +193,37 @@ let app = {
 
         $(events.each( function() {
             $(this).unbind('click');
-            $(this).removeClass('descriptionContent')
+            $(this).removeClass('descriptionContent');
         }));
 
         // Hide button
-        $('.btn-m-description').hide()
+        $('.btn-m-description').hide();
 
         $(window).click(function (event) {
 
             if ($(event.target).closest(".description--cancel").length) {
-                console.log('annuler clicked')
+                console.log('annuler clicked');
                 $(window).unbind('click');
-                $('.modal-card-big').find('.description--buttons').remove()
+                $('.modal-card-big').find('.description--buttons').remove();
                 $('.modal-card-big').find('.description').html(app.descriptionContent);
                 $('.modal-card-big').find('.description').addClass('descriptionContent');
                 // Refresh event
                 $(events.each( function() {
                     $(this).click(app.addEventModifyDescription);
                 }));
-                $('.btn-m-description').show()
+                $('.btn-m-description').show();
                return false;
             }
 
             else if ((!$(event.target).closest(".description-area").length) || ($(event.target).closest(".description--save").length)) {
-                console.log('clicked outside textarea')
+                console.log('clicked outside textarea');
                 // Unbind click
                 $(window).unbind('click');
                 // Récupération contenu textarea
                 app.descriptionContent = $('.modal-card-big').find('.textarea').val();
                 // Suppression du DOM
                 $('.modal-card-big').find('.textarea').remove();
-                $('.modal-card-big').find('.description--buttons').remove()
+                $('.modal-card-big').find('.description--buttons').remove();
                 // Ajout du contenu dans le DOM
                 $('.modal-card-big').find('.description').html(app.descriptionContent);
                 $('.modal-card-big').find('.description').addClass('descriptionContent');
@@ -231,7 +231,7 @@ let app = {
                 $(events.each( function() {
                     $(this).click(app.addEventModifyDescription);
                 }));
-                $('.btn-m-description').show()  
+                $('.btn-m-description').show();
             }
         });
     },

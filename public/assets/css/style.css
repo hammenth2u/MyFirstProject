@@ -39,12 +39,11 @@ html {
 }
 
 .modal-card-big {
-    /*min-height: calc(100vh - 40px);*/
     min-width: calc(80vw - 40px);
     background-color: #fff;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: auto;
     z-index: 1;
 }
 
@@ -58,15 +57,15 @@ html {
 }
 
 .task {
-    padding: 4em;
-    margin: 1em;
+    padding: 4rem;
+    margin: 1rem 1rem 0 1rem;
     cursor: pointer;
     border: 5px solid transparent;
 }
 
 .t {
-    padding: 4em;
-    margin: 1em;
+    padding: 4rem;
+    margin: 1rem 1rem 0 1rem;
     border: 5px solid transparent
 }
 
@@ -131,6 +130,10 @@ html {
     background-color: #00d1b2
 }
 
+.descriptionContent {
+    cursor: pointer;
+}
+
 .col-t {
     background-color: #fff;
 }
@@ -161,6 +164,10 @@ html {
     margin-bottom: 20rem;
 }
 
+.pt-1 {
+    padding-top: 1rem;
+}
+
  .is-centered {
     margin-right: auto;
     margin-left: auto;
@@ -185,6 +192,14 @@ html {
 
  .nm {
      margin: 0 !important;
+ }
+
+ .np {
+     padding: 0 !important;
+ }
+
+ .npb {
+     padding-bottom: 0 !important;
  }
 
  /* Quickview */
