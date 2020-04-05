@@ -59,24 +59,38 @@ class CardController extends AbstractController
      */
     public function changeCardStatus(Request $request)
     {
-        // A faire : (Vérifier l'accès de l'utilisateur par rapport au projet) -> Créer un service permettant de retourner les infos d'une tâche par rapport à son ID (comme ça on récupère l'id du projet par rapport à cette tâche) + vérifier l'accès de l'user par rapport au projet 
-
-        if($request->request->get('idCard')){
+        if ($request->request->get('idCard')) {
+            
             $idCard = $request->request->get('idCard');
+
+            // Récupération des informations liées à la card
+            $card = $this->getDoctrine()
+            ->getRepository(Card::class)
+            ->find($idCard);
+
+            // Si $card est null, voir pour retourner une erreur au front
+
+            // Vérification des accès
+            $access = $this->getDoctrine()->getRepository(Access::class)->findAccessByUserAndProject($this->getUser(), $card->getProject()->getId());
         }
-        
-        $card = $this->getDoctrine()->getRepository(Card::class)->find($idCard);
 
-        if($request->request->get('status')){
-            // A faire : Vérifier que le statut est soit "new" ou "inProgress" ou "finished" -> Sinon retourner une erreur au front
-            $status = $request->request->get('status');
-            $card->setStatus($status);
+        if ($access != null) {
+            // Accès autorisé
+            if($request->request->get('status')){
+                // A faire : Vérifier que le statut est soit "new" ou "inProgress" ou "finished" -> Sinon retourner une erreur au front
+                $status = $request->request->get('status');
+                $card->setStatus($status);
+            }
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($card);
+            $em->flush();
+
+            return new Response('statut modifié');
+
         }
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($card);
-        $em->flush();
-
-        return new Response('statut modifié');
+        else {
+            // Accès non autorisé
+        }
     }
 }
