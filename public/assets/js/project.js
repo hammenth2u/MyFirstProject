@@ -49,11 +49,9 @@ let app = {
 
             if (event) {
                 return event;
-                
             }
             else
                 return !event;
-                
             },
         cursor: "move", cursorAt: { top: 56, left: 56 },
     });
@@ -139,14 +137,14 @@ let app = {
                         +   '</header>'
                         +   '<div class="columns is-multiline has-text-centered nm">'
                         +       '<div class="column is-6 col-t">'
-                        +           '<p class="is-size-5 mb-2"><i class="fas fa-align-left mr-1"></i>Description<button class="button is-small is-info description-area descriptionContent btn-m-description ml-1">Modifier</button></p>'
+                        +           '<p class="is-size-5 mb-2"><i class="fas fa-align-left mr-1"></i>Description<button class="button is-small is-info description-area descriptionContent btn-m-description ml-1"> <span class="icon is-small"> <i class="fas fa-edit"></i> </span> <span>Modifier</span> </button></p>'
                         +           '<p class="is-size-6 descriptionContent description-area description">' + response[0].description + '</p>'
                         +       '</div>'
                         +       '<div class="column is-6 col-t is-size-5">'
                         +           '<p><i class="fas fa-tags mr-1"></i>Etiquettes</p>'
                         +       '</div>'
-                        +       '<div class="column is-12 col-t is-size-5">'
-                        +           '<p><i class="far fa-check-square mr-1"></i></i>Etapes</p>'
+                        +       '<div class="column is-12 col-t is-size-5 steps">'
+                        +           '<p><i class="far fa-check-square mr-1"></i></i>Etapes<button class="button is-small is-info s-add ml-1"> <span class="icon is-small"><i class="fas fa-plus-square"></i></span> <span>Ajouter</span></button></p>'
                         +       '</div>'
                         +       '<div class="column is-12 col-t is-size-5 mb-test">'
                         +           '<p><i class="fas fa-comment mr-1"></i></i></i>Commentaires</p>'
@@ -172,8 +170,9 @@ let app = {
                         //
 
                         // ADD events
-                        $('.descriptionContent').on('click', app.addEventModifyDescription);
                         $('.modal-card-head').on('click', app.addEventModifyTitle);
+                        $('.descriptionContent').on('click', app.addEventModifyDescription);
+                        $('.s-add').on('click', app.addEventNewStep);
                      }
         
                     }).fail(function() {
@@ -204,11 +203,11 @@ let app = {
         // Hide button
         $('.btn-m-description').hide();
 
-        $(window).click(function (event) {
+        $('.modal-card-big').click(function (event) {
 
             if ($(event.target).closest(".description--cancel").length) {
                 console.log('annuler clicked');
-                $(window).unbind('click');
+                $(this).unbind('click');
                 $('.modal-card-big').find('.description--buttons').remove();
                 $('.modal-card-big').find('.description').html(app.descriptionContent);
                 $('.modal-card-big').find('.description').addClass('descriptionContent');
@@ -217,14 +216,14 @@ let app = {
                     $(this).click(app.addEventModifyDescription);
                 }));
                 $('.btn-m-description').show();
-               return false;
+                return false;
             }
 
             else if ((!$(event.target).closest(".description-area").length) || ($(event.target).closest(".description--save").length)) {
                 
                 console.log('clicked outside textarea');
                 // Unbind click
-                $(window).unbind('click');
+                $(this).unbind('click');
                 // Récupération contenu textarea
                 let newDescription = $('.modal-card-big').find('.textarea').val();
 
@@ -261,32 +260,63 @@ let app = {
 
             $('.input-title').focus().val(app.cardTitle);
 
-            $('.modal-card-head').off();    
+            $(this).off();
 
-        $(window).click(function (event) {
+            $(window).click(function (event) {
 
             if (!$(event.target).closest('.modal-card-head').length) {
-                // Si la valeur de l'input a changé -> Requête ajax sinon on repasse à la valeur d'origine
                 console.log('clicked outside modal-card-head')
-                $(window).unbind('click');
+                $(this).unbind('click');
                 let newTitle = $('.input-title').val();
 
-                //console.log('Nouvelle valeur title : ' + app.cardTitle)
-
-                // A FAIRE : Si la valeur de l'input est différente de la valeur récup de base, requête AJAX à envoyer + mettre à jour le DOM
-                /*if (newTitle !== app.cardTitle) {
+                // A FAIRE : Si la valeur de l'input est différente de la valeur récup de base, requête AJAX à envoyer + mettre à jour le DOM (card dans le body)
+                if (newTitle !== app.cardTitle) {
                     // Requête AJAX à envoyer
-
-                }*/
+                    console.log('Ajax request')
+                }
 
                 $('.modal-card-title').html(
                     newTitle
                 );
-                
 
                $('.modal-card-head').on('click', app.addEventModifyTitle);
+
             }
 
+        });
+
+    },
+
+    addEventNewStep : function() {
+
+        // Ajout d'un input dans le DOM
+        $('.steps').append(
+              '<div class="field mt-1 step">'
+            +   '<div class="control">'
+            +    '<input class="input input-step s-add is-info" type="text" placeholder="Etape">'
+            +   '</div>'
+            + '</div>');
+
+            $(this).off();
+            $('.input-step').focus();
+
+        $(document).click(function (event) {
+
+            if (!$(event.target).closest(".s-add").length) {
+                console.log('clicked outside s-add')
+                $(this).unbind('click');
+                
+                if ($.trim($('.input-step').val()) !== '') {
+                    // Requête AJAX à envoyer + ajout au DOM
+
+                }
+                else {
+                    // Aucune valeur, on remove du
+                    $('.step').remove();
+                }
+                
+                $('.s-add').on('click', app.addEventNewStep);
+            }
         });
 
     },
