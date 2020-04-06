@@ -130,7 +130,7 @@ html {
     background-color: #00d1b2
 }
 
-.descriptionContent {
+.descriptionContent, .modal-card-head {
     cursor: pointer;
 }
 

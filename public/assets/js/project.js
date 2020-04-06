@@ -6,6 +6,7 @@ let app = {
     let width;
     let cardID;
     let descriptionContent;
+    let cardTitle;
 
     $("#modal").click(function() {
     $(".modal").addClass("is-active");  
@@ -133,7 +134,7 @@ let app = {
                         + '<div class="modal-background"></div>'
                         + '<div class="modal-card-big">'
                         +   '<header class="modal-card-head">'
-                        +      '<p class="modal-card-title"><i class="fas fa-tasks mr-1"></i>' + response[0].name + '</p>'
+                        +      '<p class="modal-card-title">' + response[0].name + '</p>'
                         +      '<button class="delete close" aria-label="close"></button>'
                         +   '</header>'
                         +   '<div class="columns is-multiline has-text-centered nm">'
@@ -172,6 +173,7 @@ let app = {
 
                         // ADD events
                         $('.descriptionContent').on('click', app.addEventModifyDescription);
+                        $('.modal-card-head').on('click', app.addEventModifyTitle);
                      }
         
                     }).fail(function() {
@@ -182,18 +184,21 @@ let app = {
     addEventModifyDescription : function() {
 
         app.descriptionContent = $('.modal-card-big').find('.description').text();
+
         $('.modal-card-big').find('.description').html(
         '<div class="control">'
-        +  '<textarea class="textarea description-area is-focused" placeholder="Description">' + app.descriptionContent + '</textarea>'
+        +  '<textarea class="textarea description-area is-focused" placeholder="Description">'
+        +   '</textarea>'
         + '</div>');
 
         $('<div class="buttons description--buttons mt-1"><button class="button description--save is-success mr-1">Enregistrer</button><button class="button is-danger description--cancel">Annuler</button></div>').insertAfter('p.description-area');
+
+        $('.description-area').focus().val(app.descriptionContent);
 
         let events = $('.modal-card-big').find('.descriptionContent');
 
         $(events.each( function() {
             $(this).unbind('click');
-            $(this).removeClass('descriptionContent');
         }));
 
         // Hide button
@@ -216,17 +221,24 @@ let app = {
             }
 
             else if ((!$(event.target).closest(".description-area").length) || ($(event.target).closest(".description--save").length)) {
+                
                 console.log('clicked outside textarea');
                 // Unbind click
                 $(window).unbind('click');
                 // Récupération contenu textarea
-                app.descriptionContent = $('.modal-card-big').find('.textarea').val();
+                let newDescription = $('.modal-card-big').find('.textarea').val();
+
+                // A FAIRE : Si la valeur du textarea est différente de la valeur récup de base, requête AJAX à envoyer
+                if (newDescription !== app.descriptionContent) {
+                    // Requête AJAX à envoyer
+
+                }
+
                 // Suppression du DOM
                 $('.modal-card-big').find('.textarea').remove();
                 $('.modal-card-big').find('.description--buttons').remove();
                 // Ajout du contenu dans le DOM
-                $('.modal-card-big').find('.description').html(app.descriptionContent);
-                $('.modal-card-big').find('.description').addClass('descriptionContent');
+                $('.modal-card-big').find('.description').html(newDescription);
                 // Refresh event
                 $(events.each( function() {
                     $(this).click(app.addEventModifyDescription);
@@ -234,6 +246,49 @@ let app = {
                 $('.btn-m-description').show();
             }
         });
+    },
+
+    addEventModifyTitle : function() {
+
+        app.cardTitle = $('.modal-card-big').find('.modal-card-title').text();
+
+        $('.modal-card-big').find('.modal-card-title').html(
+              '<div class="field">'
+            +  '<div class="control">'
+            +    '<input class="input input-title is-info" type="text">'
+            +  '</div>'
+            + '</div>');
+
+            $('.input-title').focus().val(app.cardTitle);
+
+            $('.modal-card-head').off();    
+
+        $(window).click(function (event) {
+
+            if (!$(event.target).closest('.modal-card-head').length) {
+                // Si la valeur de l'input a changé -> Requête ajax sinon on repasse à la valeur d'origine
+                console.log('clicked outside modal-card-head')
+                $(window).unbind('click');
+                let newTitle = $('.input-title').val();
+
+                //console.log('Nouvelle valeur title : ' + app.cardTitle)
+
+                // A FAIRE : Si la valeur de l'input est différente de la valeur récup de base, requête AJAX à envoyer + mettre à jour le DOM
+                /*if (newTitle !== app.cardTitle) {
+                    // Requête AJAX à envoyer
+
+                }*/
+
+                $('.modal-card-title').html(
+                    newTitle
+                );
+                
+
+               $('.modal-card-head').on('click', app.addEventModifyTitle);
+            }
+
+        });
+
     },
 };
 
