@@ -1,13 +1,17 @@
 let app = {
 
     init: function() {
-
+    // Déclaration variables
     let quickviews = bulmaQuickview.attach(); // quickview
     let width;
     let cardID;
+    let currentCard;
     let descriptionContent;
     let cardTitle;
+    let lastEventName;
+    let events;
 
+    // Bind events
     $("#modal").click(function() {
     $(".modal").addClass("is-active");  
     });
@@ -110,7 +114,8 @@ let app = {
 
     showCard: function() {
 
-        let cardID = jQuery(this).attr("card-id");
+        app.currentCard = $(this);
+        let cardID = app.currentCard.attr("card-id");
 
         $.ajax({
                  url: '/getCardData', 
@@ -170,9 +175,9 @@ let app = {
                         //
 
                         // ADD events
-                        $('.modal-card-head').on('click', app.addEventModifyTitle);
-                        $('.descriptionContent').on('click', app.addEventModifyDescription);
-                        $('.s-add').on('click', app.addEventNewStep);
+                        $('.modal-card-head').click(app.addEventModifyTitle);
+                        $('.descriptionContent').click(app.addEventModifyDescription);
+                        $('.s-add').click(app.addEventNewStep);
                      }
         
                     }).fail(function() {
@@ -180,7 +185,18 @@ let app = {
                     });
     },
 
+    // Modification de la description d'une card lors du clic
     addEventModifyDescription : function() {
+
+        console.log(app.lastEventName);
+
+        // Vérifier si un évenement est déjà en cours
+        if (app.lastEventName !== undefined) {
+            // Clean l'événement en cours
+            app.finishLastEvent(app.lastEventName);
+        }
+
+        app.lastEventName = 'addEventModifyDescription';
 
         app.descriptionContent = $('.modal-card-big').find('.description').text();
 
@@ -194,16 +210,20 @@ let app = {
 
         $('.description-area').focus().val(app.descriptionContent);
 
-        let events = $('.modal-card-big').find('.descriptionContent');
+        app.events = $('.modal-card-big').find('.descriptionContent');
 
-        $(events.each( function() {
+        $(app.events.each( function() {
             $(this).unbind('click');
         }));
 
         // Hide button
         $('.btn-m-description').hide();
+        console.log('window unload all')
+        $(window).off();
 
-        $('.modal-card-big').click(function (event) {
+        $(window).click(function (event) {
+
+            console.log('load event window description')
 
             if ($(event.target).closest(".description--cancel").length) {
                 console.log('annuler clicked');
@@ -216,6 +236,7 @@ let app = {
                     $(this).click(app.addEventModifyDescription);
                 }));
                 $('.btn-m-description').show();
+                app.lastEventName = undefined;
                 return false;
             }
 
@@ -223,7 +244,9 @@ let app = {
                 
                 console.log('clicked outside textarea');
                 // Unbind click
-                $(this).unbind('click');
+                console.log('unload window click on description')
+                $(window).off();
+                
                 // Récupération contenu textarea
                 let newDescription = $('.modal-card-big').find('.textarea').val();
 
@@ -239,15 +262,26 @@ let app = {
                 // Ajout du contenu dans le DOM
                 $('.modal-card-big').find('.description').html(newDescription);
                 // Refresh event
-                $(events.each( function() {
+                $(app.events.each( function() {
                     $(this).click(app.addEventModifyDescription);
                 }));
+                app.lastEventName = undefined;
                 $('.btn-m-description').show();
             }
+                
         });
     },
 
+    // Modification du titre d'une card lors du clic
     addEventModifyTitle : function() {
+
+        // Vérifier si un évenement est déjà en cours
+        if (app.lastEventName !== undefined) {
+            // Clean l'événement en cours
+            app.finishLastEvent(app.lastEventName);
+        }
+
+        app.lastEventName = 'addEventModifyTitle';
 
         app.cardTitle = $('.modal-card-big').find('.modal-card-title').text();
 
@@ -258,35 +292,21 @@ let app = {
             +  '</div>'
             + '</div>');
 
-            $('.input-title').focus().val(app.cardTitle);
+        $('.input-title').focus().val(app.cardTitle);
 
-            $(this).off();
-
-            $(window).click(function (event) {
+        $(this).off();
+        console.log('window unload all')
+        $(window).off();
+    
+        $(window).click(function (event) {
 
             if (!$(event.target).closest('.modal-card-head').length) {
-                console.log('clicked outside modal-card-head')
-                $(this).unbind('click');
-                let newTitle = $('.input-title').val();
-
-                // A FAIRE : Si la valeur de l'input est différente de la valeur récup de base, requête AJAX à envoyer + mettre à jour le DOM (card dans le body)
-                if (newTitle !== app.cardTitle) {
-                    // Requête AJAX à envoyer
-                    console.log('Ajax request')
-                }
-
-                $('.modal-card-title').html(
-                    newTitle
-                );
-
-               $('.modal-card-head').on('click', app.addEventModifyTitle);
-
+                app.finishLastEvent(app.lastEventName);
             }
-
         });
-
     },
 
+    // Ajout d'une nouvelle étape sur une card
     addEventNewStep : function() {
 
         // Ajout d'un input dans le DOM
@@ -303,15 +323,14 @@ let app = {
         $(document).click(function (event) {
 
             if (!$(event.target).closest(".s-add").length) {
-                console.log('clicked outside s-add')
-                $(this).unbind('click');
+                console.log('clicked outside s-add');
                 
                 if ($.trim($('.input-step').val()) !== '') {
                     // Requête AJAX à envoyer + ajout au DOM
 
                 }
                 else {
-                    // Aucune valeur, on remove du
+                    // Aucune valeur, on remove du DOM
                     $('.step').remove();
                 }
                 
@@ -320,6 +339,61 @@ let app = {
         });
 
     },
+
+    // Ajout d'un nouveau commentaire sur une card
+    addEventNewComment : function() {
+
+    },
+
+    finishLastEvent: function(lastEventName) {
+
+            if ((lastEventName) == 'addEventModifyTitle')
+            {
+                    $(window).off();
+                    let newTitle = $('.input-title').val();
+
+                    // A FAIRE : Si la valeur de l'input est différente de la valeur récup de base, requête AJAX à envoyer + mettre à jour le DOM (card dans le body)
+                    if (newTitle !== app.cardTitle) {
+                        // Requête AJAX à envoyer
+                        console.log('Ajax request');
+
+                        // Mise à jour du titre de la carte dans le DOM
+                        app.currentCard.find('.c-name').html(newTitle);
+                    }
+
+                    $('.modal-card-title').html(
+                        newTitle
+                    );
+                    app.lastEventName = undefined;
+                    $('.modal-card-head').click(app.addEventModifyTitle);
+            }
+
+            else if ((lastEventName) == 'addEventModifyDescription')
+            {
+                    $(window).off();
+                    
+                    // Récupération contenu textarea
+                    let newDescription = $('.modal-card-big').find('.textarea').val();
+
+                    // A FAIRE : Si la valeur du textarea est différente de la valeur récup de base, requête AJAX à envoyer
+                    if (newDescription !== app.descriptionContent) {
+                        // Requête AJAX à envoyer
+
+                    }
+
+                    // Suppression du DOM
+                    $('.modal-card-big').find('.textarea').remove();
+                    $('.modal-card-big').find('.description--buttons').remove();
+                    // Ajout du contenu dans le DOM
+                    $('.modal-card-big').find('.description').html(newDescription);
+                    // Refresh event
+                    $(app.events.each( function() {
+                        $(this).click(app.addEventModifyDescription);
+                    }));
+                    app.lastEventName = undefined;
+                    $('.btn-m-description').show();
+            }
+        },
 };
 
 $(app.init);
