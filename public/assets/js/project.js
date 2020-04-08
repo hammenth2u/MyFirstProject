@@ -188,8 +188,6 @@ let app = {
     // Modification de la description d'une card lors du clic
     addEventModifyDescription : function() {
 
-        console.log(app.lastEventName);
-
         // Vérifier si un évenement est déjà en cours
         if (app.lastEventName !== undefined) {
             // Clean l'événement en cours
@@ -219,7 +217,7 @@ let app = {
         // Hide button
         $('.btn-m-description').hide();
         console.log('window unload all')
-        $(window).off();
+        //$(window).off();
 
         $(window).click(function (event) {
 
@@ -232,11 +230,12 @@ let app = {
                 $('.modal-card-big').find('.description').html(app.descriptionContent);
                 $('.modal-card-big').find('.description').addClass('descriptionContent');
                 // Refresh event
-                $(events.each( function() {
+                $(app.events.each( function() {
                     $(this).click(app.addEventModifyDescription);
                 }));
                 $('.btn-m-description').show();
                 app.lastEventName = undefined;
+                app.events = undefined;
                 return false;
             }
 
@@ -265,6 +264,7 @@ let app = {
                 $(app.events.each( function() {
                     $(this).click(app.addEventModifyDescription);
                 }));
+                app.events = undefined;
                 app.lastEventName = undefined;
                 $('.btn-m-description').show();
             }
@@ -296,7 +296,7 @@ let app = {
 
         $(this).off();
         console.log('window unload all')
-        $(window).off();
+        //$(window).off();
     
         $(window).click(function (event) {
 
@@ -317,13 +317,14 @@ let app = {
             +   '</div>'
             + '</div>');
 
-            $(this).off();
-            $('.input-step').focus();
+        $(this).off();
+        $('.input-step').focus();
 
         $(document).click(function (event) {
 
             if (!$(event.target).closest(".s-add").length) {
                 console.log('clicked outside s-add');
+                $(document).off();
                 
                 if ($.trim($('.input-step').val()) !== '') {
                     // Requête AJAX à envoyer + ajout au DOM
@@ -368,7 +369,7 @@ let app = {
                     $('.modal-card-head').click(app.addEventModifyTitle);
             }
 
-            else if ((lastEventName) == 'addEventModifyDescription')
+            if ((lastEventName) == 'addEventModifyDescription')
             {
                     $(window).off();
                     
