@@ -153,6 +153,11 @@ let app = {
                         +       '</div>'
                         +       '<div class="column is-12 col-t is-size-5 mb-test">'
                         +           '<p><i class="fas fa-comment mr-1"></i></i></i>Commentaires</p>'
+                        +           '<div class="field">'
+                        +               '<div class="control">'
+                        +                   '<input class="input is-info c-add" type="text" placeholder="Commentaire...">'
+                        +               '</div>'
+                        +           '</div>'
                         +       '</div>'
                         +   '</div>'
                         +   '<footer class="modal-card-foot">'
@@ -178,6 +183,7 @@ let app = {
                         $('.modal-card-head').click(app.addEventModifyTitle);
                         $('.descriptionContent').click(app.addEventModifyDescription);
                         $('.s-add').click(app.addEventNewStep);
+                        $('.c-add').keypress(app.addEventNewComment);
                      }
         
                     }).fail(function() {
@@ -240,40 +246,14 @@ let app = {
             }
 
             else if ((!$(event.target).closest(".description-area").length) || ($(event.target).closest(".description--save").length)) {
-                
-                console.log('clicked outside textarea');
-                // Unbind click
-                console.log('unload window click on description')
-                $(window).off();
-                
-                // Récupération contenu textarea
-                let newDescription = $('.modal-card-big').find('.textarea').val();
-
-                // A FAIRE : Si la valeur du textarea est différente de la valeur récup de base, requête AJAX à envoyer
-                if (newDescription !== app.descriptionContent) {
-                    // Requête AJAX à envoyer
-
-                }
-
-                // Suppression du DOM
-                $('.modal-card-big').find('.textarea').remove();
-                $('.modal-card-big').find('.description--buttons').remove();
-                // Ajout du contenu dans le DOM
-                $('.modal-card-big').find('.description').html(newDescription);
-                // Refresh event
-                $(app.events.each( function() {
-                    $(this).click(app.addEventModifyDescription);
-                }));
-                app.events = undefined;
-                app.lastEventName = undefined;
-                $('.btn-m-description').show();
+                app.finishLastEvent(app.lastEventName);
             }
                 
         });
     },
 
     // Modification du titre d'une card lors du clic
-    addEventModifyTitle : function() {
+    addEventModifyTitle : function(e) {
 
         // Vérifier si un évenement est déjà en cours
         if (app.lastEventName !== undefined) {
@@ -297,9 +277,16 @@ let app = {
         $(this).off();
         console.log('window unload all')
         //$(window).off();
+
+        $('.input-title').keypress(function(e) { 
+            if(e.which == 13) {
+                // Touche entree pressée
+                app.finishLastEvent(app.lastEventName);
+                $(this).off
+            }
+        });
     
         $(window).click(function (event) {
-
             if (!$(event.target).closest('.modal-card-head').length) {
                 app.finishLastEvent(app.lastEventName);
             }
@@ -308,6 +295,14 @@ let app = {
 
     // Ajout d'une nouvelle étape sur une card
     addEventNewStep : function() {
+
+        // Vérifier si un évenement est déjà en cours
+        if (app.lastEventName !== undefined) {
+            // Clean l'événement en cours
+            app.finishLastEvent(app.lastEventName);
+        }
+
+        app.lastEventName = 'addEventNewStep';
 
         // Ajout d'un input dans le DOM
         $('.steps').append(
@@ -320,29 +315,37 @@ let app = {
         $(this).off();
         $('.input-step').focus();
 
-        $(document).click(function (event) {
+        $('.s-add').keypress(function(e) { 
+            if (e.which == 13) {
+                // Touche entree pressée
+                app.finishLastEvent(app.lastEventName);
+                $(this).off();
+                return false;
+            }
+        });
 
+        $(window).click(function (event) {
             if (!$(event.target).closest(".s-add").length) {
-                console.log('clicked outside s-add');
-                $(document).off();
-                
-                if ($.trim($('.input-step').val()) !== '') {
-                    // Requête AJAX à envoyer + ajout au DOM
-
-                }
-                else {
-                    // Aucune valeur, on remove du DOM
-                    $('.step').remove();
-                }
-                
-                $('.s-add').on('click', app.addEventNewStep);
+                app.finishLastEvent(app.lastEventName);
             }
         });
 
     },
 
     // Ajout d'un nouveau commentaire sur une card
-    addEventNewComment : function() {
+    addEventNewComment : function(e) {
+
+            if(e.which == 13) {
+                // Touche entree pressée
+                if ($.trim($('.c-add').val()) !== '') {
+                    // Requête AJAX à envoyer + ajout au DOM
+                    console.log('Ajax request')
+                    // On vide l'input
+                    $('.c-add').val('');
+                    // Ajout au DOM
+
+                }
+            }
 
     },
 
@@ -350,6 +353,7 @@ let app = {
 
             if ((lastEventName) == 'addEventModifyTitle')
             {
+                    console.log('finish event ModifyTitle');
                     $(window).off();
                     let newTitle = $('.input-title').val();
 
@@ -372,13 +376,14 @@ let app = {
             if ((lastEventName) == 'addEventModifyDescription')
             {
                     $(window).off();
-                    
+                    console.log('finish event ModifyDescription');
                     // Récupération contenu textarea
                     let newDescription = $('.modal-card-big').find('.textarea').val();
 
                     // A FAIRE : Si la valeur du textarea est différente de la valeur récup de base, requête AJAX à envoyer
                     if (newDescription !== app.descriptionContent) {
                         // Requête AJAX à envoyer
+                        console.log('Ajax request')
 
                     }
 
@@ -393,6 +398,26 @@ let app = {
                     }));
                     app.lastEventName = undefined;
                     $('.btn-m-description').show();
+            }
+
+            if ((lastEventName) == 'addEventNewStep')
+            {
+                console.log('finish event NewStep');
+                $(window).off();
+                
+                if ($.trim($('.input-step').val()) !== '') {
+                    // Requête AJAX à envoyer + ajout au DOM
+                    console.log('Ajax request')
+                    $('.step').remove();
+
+                }
+                else {
+                    // Aucune valeur, on remove du DOM
+                    $('.step').remove();
+                }
+                
+                $('.s-add').on('click', app.addEventNewStep);
+                app.lastEventName = undefined;
             }
         },
 };
