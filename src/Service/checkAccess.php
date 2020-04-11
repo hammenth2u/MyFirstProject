@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Service;
-
+use Doctrine\ORM\EntityManagerInterface;
+//use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\ORM\EntityManager;
 use App\Entity\Access;
+//use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
-class checkAccess extends WebTestCase
+class checkAccess extends EntityManager
 {
 
     // public function setUp()
@@ -18,14 +19,14 @@ class checkAccess extends WebTestCase
     //         ->getManager();
     // }
 
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->entityManager = $em;
+    }
+
     public function checkAccessUser($user, $project): bool
     {
-        $access = $this->entityManager
-            ->getRepository(Access::class)
-            ->findAccessByUserAndProject($user, $project);
-        ;
-
-        //$access = $this->getDoctrine()->getRepository(Access::class)->findAccessByUserAndProject($user, $project);
+        $access = $this->entityManager->getRepository(Access::class)->findAccessByUserAndProject($user, $project);
         if ($access != null){
             return true;
         }else{

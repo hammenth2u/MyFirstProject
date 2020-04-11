@@ -126,10 +126,13 @@ let app = {
                        }
                  }).done(function(response) {
                      if (response['Error'] == 'Accès non autorisé') {
-                     // Afficher un pop up d'erreur ?
+                        // Afficher un pop up d'erreur ?
+                        console.log('Error : Not authorized')
                      }
 
-                     if (response !== undefined) {
+                     else {
+
+                      if (response !== undefined) {
                         let responseHTML = '';
 
                         responseHTML += 
@@ -185,7 +188,7 @@ let app = {
                         $('.s-add').click(app.addEventNewStep);
                         $('.c-add').keypress(app.addEventNewComment);
                      }
-        
+                    }
                     }).fail(function() {
                         //$('.result-search-content').html('Erreur de chargement');
                     });

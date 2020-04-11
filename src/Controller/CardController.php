@@ -9,6 +9,7 @@ use App\Entity\Access;
 use App\Entity\Card;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use App\Service\checkAccess;
 
 
 class CardController extends AbstractController
@@ -18,7 +19,7 @@ class CardController extends AbstractController
      * 
      * @Route("/getCardData", name="getCardData", methods={"POST"})
      */
-    public function getCardData() : Response
+    public function getCardData(checkAccess $service) : Response
     {
         $cardID = $_POST['cardID'];   
 
@@ -28,9 +29,10 @@ class CardController extends AbstractController
         ->find($cardID);
 
         // Vérification des accès
-        $access = $this->getDoctrine()->getRepository(Access::class)->findAccessByUserAndProject($this->getUser(), $cardDetails->getProject()->getId());
+        //$access = $this->getDoctrine()->getRepository(Access::class)->findAccessByUserAndProject($this->getUser(), $cardDetails->getProject()->getId());
 
-        
+        $access = $service->checkAccessUser($this->getUser(), $cardDetails->getProject()->getId());
+
         if ($access != null) {
             // Accès autorisé
             $formatted = [];

@@ -17,12 +17,10 @@ class ProjectController extends AbstractController
     /**
      * @Route("/p/{id}", name="showProject")
      */
-    public function showProject(Project $project, Request $request) : Response
+    public function showProject(Project $project, Request $request, checkAccess $service) : Response
     {
         $user = $this->getUser();
         $status = null;
-
-        
 
         //Pour retourner la liste des utilisateurs d'un projet
         $accesses = $project->getAccesses();
@@ -33,11 +31,11 @@ class ProjectController extends AbstractController
             ];
         }
         
+        //$access = $this->getDoctrine()->getRepository(Access::class)->findAccessByUserAndProject($user, $project);
+        $access = $service->checkAccessUser($user, $project);
 
-        $access = $this->getDoctrine()->getRepository(Access::class)->findAccessByUserAndProject($user, $project);
+        dump($access);
    
-        
-
         //vérification des accès
         if ($access != null) {
 
@@ -76,8 +74,6 @@ class ProjectController extends AbstractController
            $entityManager = $this->getDoctrine()->getManager();
            $entityManager->persist($card);
            $entityManager->flush();
-
-
            
            $pathInfo = $request->getPathInfo();
            $requestUri = $request->getRequestUri();
