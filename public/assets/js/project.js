@@ -13,11 +13,11 @@ let app = {
 
     // Bind events
     $("#modal").click(function() {
-    $(".modal").addClass("is-active");  
+        $(".modal").addClass("is-active");  
     });
 
     $(".close").click(function() {
-    $(".modal").removeClass("is-active");
+        $(".modal").removeClass("is-active");
     });
 
     $(".modal-background").click(function() {
@@ -222,8 +222,6 @@ let app = {
 
         // Hide button
         $('.btn-m-description').hide();
-        console.log('window unload all')
-        //$(window).off();
 
         $(window).click(function (event) {
 
@@ -275,8 +273,6 @@ let app = {
         $('.input-title').focus().val(app.cardTitle);
 
         $(this).off();
-        console.log('window unload all')
-        //$(window).off();
 
         $('.input-title').keypress(function(e) { 
             if(e.which == 13) {
