@@ -21,8 +21,8 @@ class CardController extends AbstractController
      */
     public function getCardData(checkAccess $service) : Response
     {
-        $cardID = $_POST['cardID'];   
-
+        $cardID = $_POST['cardID']; 
+        
         // Récupération des informations liées à la card
         $cardDetails = $this->getDoctrine()
         ->getRepository(Card::class)
@@ -35,9 +35,11 @@ class CardController extends AbstractController
             // Accès autorisé
             $formatted = [];
             $formatted [] = [
+               'userConnected' => $this->getUser(),
                'id' => $cardDetails->getId(),
                'name' => $cardDetails->getName(),
                'description' => $cardDetails->getDescription(),
+               'comments'=> $cardDetails->getComments(),
             ];
         
         return new JsonResponse($formatted);
@@ -121,6 +123,7 @@ class CardController extends AbstractController
             // Accès autorisé
             if($request->request->get('description')){
                 $description = $request->request->get('description');
+
                 $card->setDescription($description);
 
                 $em = $this->getDoctrine()->getManager();

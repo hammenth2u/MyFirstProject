@@ -47,4 +47,43 @@ class CommentRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    /**
+     * 
+     * @param Card $card
+     * @return Comment[]
+     */
+    public function findCommentByCard($card)
+    {
+        $qb = $this->createQueryBuilder('co')
+        ->addSelect('c')
+        ->join('co.card', 'c')
+        ->where('co.card = :myCard')
+        ->setParameter('myCard', $card)
+        ->orderBy('co.createdAt', 'ASC')
+        ;
+    
+        //cast retour de requete
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * 
+     * @param Card $card
+     * @param User $user 
+     * @return Comment[]
+     */
+    public function findCommentByCardAndUser($user, $card)
+    {
+        $query = $this->getEntityManager()->createQuery('
+
+            SELECT co
+            FROM App\Entity\Comment co
+            WHERE co.user = :user
+            AND co.card = :card
+        ')
+        ->setParameter('card', $card)
+        ->setParameter('user', $user);
+        return $query->getResult(); 
+    }
 }

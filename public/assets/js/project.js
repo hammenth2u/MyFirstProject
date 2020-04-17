@@ -206,7 +206,7 @@ let app = {
 
         app.lastEventName = 'addEventModifyDescription';
 
-        app.descriptionContent = $('.modal-card-big').find('.description').text();
+        app.descriptionContent = $('.modal-card-big').find('.description').html().replace(/<br>/g, '\n');
 
         $('.modal-card-big').find('.description').html(
         '<div class="control">'
@@ -235,7 +235,10 @@ let app = {
                 console.log('annuler clicked');
                 $(this).unbind('click');
                 $('.modal-card-big').find('.description--buttons').remove();
-                $('.modal-card-big').find('.description').html(app.descriptionContent);
+                // Add <br>
+                let description = app.descriptionContent.replace( /\r?\n/g, "<br>" );
+                //
+                $('.modal-card-big').find('.description').html(description);
                 $('.modal-card-big').find('.description').addClass('descriptionContent');
                 // Refresh event
                 $(app.events.each( function() {
@@ -335,17 +338,30 @@ let app = {
     // Ajout d'un nouveau commentaire sur une card
     addEventNewComment : function(e) {
 
-            if(e.which == 13) {
-                // Touche entree pressée
-                if ($.trim($('.c-add').val()) !== '') {
-                    // Requête AJAX à envoyer + ajout au DOM
-                    console.log('Ajax request')
-                    // On vide l'input
-                    $('.c-add').val('');
-                    // Ajout au DOM
+        if(e.which == 13) {
+            // Touche entree pressée
+            let contentComment = $.trim($('.c-add').val());
+            let idCard = app.cardID;
 
-                }
+            if ($.trim(contentComment) !== '') {
+                // Requête AJAX à envoyer + ajout au DOM
+                $.ajax({
+                    url: '/addComment', 
+                    method: 'POST', 
+                    dataType: 'json',
+                    data: {
+                            idCard,
+                            contentComment
+                          }
+                    }).done(function(response) {
+                });
+                // On vide l'input
+                $('.c-add').val('');
+                contentComment = undefined;
+                // Ajout au DOM
+
             }
+        }
 
     },
 
@@ -388,8 +404,9 @@ let app = {
                     $(window).off();
                     console.log('finish event ModifyDescription');
                     // Récupération contenu textarea
-                    let description = $('.modal-card-big').find('.textarea').val();
+                    let description = $('.modal-card-big').find('.textarea').val().replace( /\r?\n/g, "<br>" );
                     let idCard = app.cardID;
+                    console.log(description);
 
                     // Si la valeur du textarea est différente de la valeur récup de base on sauvegarde -> requête AJAX
                     if (description !== app.descriptionContent) {

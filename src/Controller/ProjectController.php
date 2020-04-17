@@ -34,7 +34,7 @@ class ProjectController extends AbstractController
         //$access = $this->getDoctrine()->getRepository(Access::class)->findAccessByUserAndProject($user, $project);
         $access = $service->checkAccessUser($user, $project);
 
-        dump($access);
+        //dump($access);
    
         //vérification des accès
         if ($access != null) {
