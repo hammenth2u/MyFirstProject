@@ -7,7 +7,7 @@ let app = {
     let cardID;
     let currentCard;
     let descriptionContent;
-    let cardTitle;
+    let cardName;
     let lastEventName;
     let events;
 
@@ -70,7 +70,7 @@ let app = {
             if ((status == 'new') || (status == 'inProgress') || (status == 'finished'))
             {
                 $.ajax({
-                    url: '/changeCardStatus', 
+                    url: '/updateCardStatus', 
                     method: 'POST', 
                     dataType: 'json',
                     data: {
@@ -116,6 +116,7 @@ let app = {
 
         app.currentCard = $(this);
         let cardID = app.currentCard.attr("card-id");
+        app.cardID = cardID;
 
         $.ajax({
                  url: '/getCardData', 
@@ -183,7 +184,7 @@ let app = {
                         //
 
                         // ADD events
-                        $('.modal-card-head').click(app.addEventModifyTitle);
+                        $('.modal-card-head').click(app.addEventModifyName);
                         $('.descriptionContent').click(app.addEventModifyDescription);
                         $('.s-add').click(app.addEventNewStep);
                         $('.c-add').keypress(app.addEventNewComment);
@@ -191,7 +192,7 @@ let app = {
                     }
                     }).fail(function() {
                         //$('.result-search-content').html('Erreur de chargement');
-                    });
+                });
     },
 
     // Modification de la description d'une card lors du clic
@@ -254,7 +255,7 @@ let app = {
     },
 
     // Modification du titre d'une card lors du clic
-    addEventModifyTitle : function(e) {
+    addEventModifyName : function(e) {
 
         // Vérifier si un évenement est déjà en cours
         if (app.lastEventName !== undefined) {
@@ -262,9 +263,9 @@ let app = {
             app.finishLastEvent(app.lastEventName);
         }
 
-        app.lastEventName = 'addEventModifyTitle';
+        app.lastEventName = 'addEventModifyName';
 
-        app.cardTitle = $('.modal-card-big').find('.modal-card-title').text();
+        app.cardName = $('.modal-card-big').find('.modal-card-title').text();
 
         $('.modal-card-big').find('.modal-card-title').html(
               '<div class="field">'
@@ -273,7 +274,7 @@ let app = {
             +  '</div>'
             + '</div>');
 
-        $('.input-title').focus().val(app.cardTitle);
+        $('.input-title').focus().val(app.cardName);
 
         $(this).off();
 
@@ -350,26 +351,36 @@ let app = {
 
     finishLastEvent: function(lastEventName) {
 
-            if ((lastEventName) == 'addEventModifyTitle')
+            if ((lastEventName) == 'addEventModifyName')
             {
-                    console.log('finish event ModifyTitle');
+                    console.log('finish event ModifyName');
                     $(window).off();
-                    let newTitle = $('.input-title').val();
+                    let name = $('.input-title').val();
+                    let idCard = app.cardID;
 
-                    // A FAIRE : Si la valeur de l'input est différente de la valeur récup de base, requête AJAX à envoyer + mettre à jour le DOM (card dans le body)
-                    if (newTitle !== app.cardTitle) {
+                    if (name !== app.cardName) {
                         // Requête AJAX à envoyer
-                        console.log('Ajax request');
+                        $.ajax({
+                            url: '/updateCardName', 
+                            method: 'POST', 
+                            dataType: 'json',
+                            data: {
+                                    idCard,
+                                    name
+                                  }
+                            }).done(function(response) {
+                        });
 
                         // Mise à jour du titre de la carte dans le DOM
-                        app.currentCard.find('.c-name').html(newTitle);
+                        app.currentCard.find('.c-name').html(name);
                     }
 
-                    $('.modal-card-title').html(
-                        newTitle
-                    );
+                    $('.modal-card-title').html(name);
+
                     app.lastEventName = undefined;
-                    $('.modal-card-head').click(app.addEventModifyTitle);
+                    idCard = undefined;
+                    name = undefined;
+                    $('.modal-card-head').click(app.addEventModifyName);
             }
 
             if ((lastEventName) == 'addEventModifyDescription')
@@ -377,24 +388,37 @@ let app = {
                     $(window).off();
                     console.log('finish event ModifyDescription');
                     // Récupération contenu textarea
-                    let newDescription = $('.modal-card-big').find('.textarea').val();
+                    let description = $('.modal-card-big').find('.textarea').val();
+                    let idCard = app.cardID;
 
-                    // A FAIRE : Si la valeur du textarea est différente de la valeur récup de base, requête AJAX à envoyer
-                    if (newDescription !== app.descriptionContent) {
-                        // Requête AJAX à envoyer
-                        console.log('Ajax request')
-
+                    // Si la valeur du textarea est différente de la valeur récup de base on sauvegarde -> requête AJAX
+                    if (description !== app.descriptionContent) {
+                        
+                        $.ajax({
+                            url: '/updateCardDescription', 
+                            method: 'POST', 
+                            dataType: 'json',
+                            data: {
+                                    idCard,
+                                    description
+                                  }
+                            }).done(function(response) {
+                        });
                     }
 
                     // Suppression du DOM
                     $('.modal-card-big').find('.textarea').remove();
                     $('.modal-card-big').find('.description--buttons').remove();
                     // Ajout du contenu dans le DOM
-                    $('.modal-card-big').find('.description').html(newDescription);
+                    $('.modal-card-big').find('.description').html(description);
+
                     // Refresh event
                     $(app.events.each( function() {
                         $(this).click(app.addEventModifyDescription);
                     }));
+                    // Free variable
+                    description = undefined;
+                    idCard = undefined;
                     app.lastEventName = undefined;
                     $('.btn-m-description').show();
             }

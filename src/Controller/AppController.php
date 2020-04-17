@@ -42,9 +42,8 @@ class AppController extends AbstractController
 
             // Il faudra générer un identifiant unique pour le projet (à voir plus tard pour éviter project/0 -> project/wxzREdf2sd)
         
-            $user = $this->getUser();
-            $userId = $user->getId();
-
+            $userId = $this->getUser()->getId();
+            
             $project->setUser($this->getUser());
             //Generate a random string.
             $token = openssl_random_pseudo_bytes(16);
@@ -56,7 +55,7 @@ class AppController extends AbstractController
             $entityManager->persist($project);
             $entityManager->flush();
 
-            // Il faudra aussi ajouter l'accès à l'utilisateur dans la table Access pour qu'il puisse accéder au projet (à voir plus tard)
+            // Création de l'accès au projet
             $access = new Access();
             $access->setUser($this->getUser());
             $access->setProject($project);

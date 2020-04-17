@@ -15,7 +15,7 @@ use App\Service\checkAccess;
 class CardController extends AbstractController
 {
     /**
-     * Méthode permettant de renvoyer les données d'une card lors d'un clic sur une des tâches d'un projet
+     * Méthode permettant de renvoyer les données d'une card
      * 
      * @Route("/getCardData", name="getCardData", methods={"POST"})
      */
@@ -29,11 +29,9 @@ class CardController extends AbstractController
         ->find($cardID);
 
         // Vérification des accès
-        //$access = $this->getDoctrine()->getRepository(Access::class)->findAccessByUserAndProject($this->getUser(), $cardDetails->getProject()->getId());
-
         $access = $service->checkAccessUser($this->getUser(), $cardDetails->getProject()->getId());
 
-        if ($access != null) {
+        if ($access === true) {
             // Accès autorisé
             $formatted = [];
             $formatted [] = [
@@ -57,9 +55,9 @@ class CardController extends AbstractController
     /**
      * Méthode permettant de modifier le statut d'une tâche
      * 
-     * @Route("/changeCardStatus", name="changeCardStatus", methods={"POST"})
+     * @Route("/updateCardStatus", name="updateCardStatus", methods={"POST"})
      */
-    public function changeCardStatus(Request $request)
+    public function updateCardStatus(Request $request, checkAccess $service)
     {
         if ($request->request->get('idCard')) {
             
@@ -73,10 +71,11 @@ class CardController extends AbstractController
             // Si $card est null, voir pour retourner une erreur au front
 
             // Vérification des accès
-            $access = $this->getDoctrine()->getRepository(Access::class)->findAccessByUserAndProject($this->getUser(), $card->getProject()->getId());
+            $access = $service->checkAccessUser($this->getUser(), $card->getProject()->getId());
+            //$access = $this->getDoctrine()->getRepository(Access::class)->findAccessByUserAndProject($this->getUser(), $card->getProject()->getId());
         }
 
-        if ($access != null) {
+        if ($access === true) {
             // Accès autorisé
             if($request->request->get('status')){
                 // A faire : Vérifier que le statut est soit "new" ou "inProgress" ou "finished" -> Sinon retourner une erreur au front
@@ -97,11 +96,11 @@ class CardController extends AbstractController
     }
 
     /**
-     * Méthode permettant de modifier le statut d'une tâche
+     * Méthode permettant de modifier la description d'une card
      * 
-     * @Route("/changeCardStatus", name="changeCardStatus", methods={"POST"})
+     * @Route("/updateCardDescription", name="updateCardDescription", methods={"POST"})
      */
-    public function updateCard(Request $request)
+    public function updateCardDescription(Request $request, checkAccess $service)
     {
         if ($request->request->get('idCard')) {
             
@@ -115,23 +114,61 @@ class CardController extends AbstractController
             // Si $card est null, voir pour retourner une erreur au front
 
             // Vérification des accès
-            $access = $this->getDoctrine()->getRepository(Access::class)->findAccessByUserAndProject($this->getUser(), $card->getProject()->getId());
+            $access = $service->checkAccessUser($this->getUser(), $card->getProject()->getId());
         }
 
-        if ($access != null) {
+        if ($access === true) {
             // Accès autorisé
-            if($request->request->get('status')){
-                // A faire : Vérifier que le statut est soit "new" ou "inProgress" ou "finished" -> Sinon retourner une erreur au front
-                $status = $request->request->get('status');
-                $card->setStatus($status);
+            if($request->request->get('description')){
+                $description = $request->request->get('description');
+                $card->setDescription($description);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($card);
+                $em->flush();
+
+                return new Response('Description modifiée');
             }
+        }
+        else {
+            // Accès non autorisé
+        }
+    }
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($card);
-            $em->flush();
+     /**
+     * Méthode permettant de modifier le nom d'une card
+     * 
+     * @Route("/updateCardName", name="updateCardName", methods={"POST"})
+     */
+    public function updateCardName(Request $request, checkAccess $service)
+    {
+        if ($request->request->get('idCard')) {
+            
+            $idCard = $request->request->get('idCard');
 
-            return new Response('statut modifié');
+            // Récupération des informations liées à la card
+            $card = $this->getDoctrine()
+            ->getRepository(Card::class)
+            ->find($idCard);
 
+            // Si $card est null, voir pour retourner une erreur au front
+
+            // Vérification des accès
+            $access = $service->checkAccessUser($this->getUser(), $card->getProject()->getId());
+        }
+
+        if ($access === true) {
+            // Accès autorisé
+            if($request->request->get('name')){
+                $name = $request->request->get('name');
+                $card->setName($name);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($card);
+                $em->flush();
+
+                return new Response('Nom modifié');
+            }
         }
         else {
             // Accès non autorisé
