@@ -138,6 +138,11 @@ html {
     background-color: #fff;
 }
 
+.comment {
+    padding: 2rem;
+    border-radius: 0.5rem;
+}
+
  /* Modifiers */
 
  .mr-1 {
@@ -151,6 +156,10 @@ html {
  .mt-1 {
      margin-top: 0.4rem;
  }
+
+ .mt-2 {
+    margin-top: 0.8rem;
+}
 
  .mb-1 {
      margin-bottom: 0.4rem;

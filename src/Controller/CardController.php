@@ -33,13 +33,27 @@ class CardController extends AbstractController
 
         if ($access === true) {
             // Accès autorisé
+            // Récupération + formattage commentaires
+            $comments = [];
+            foreach ($cardDetails->getComments() as $value)
+            {
+                $comments[] =  
+                [
+                    'userId' => $value->getUser()->getId(),
+                    'content' => $value->getContent(),
+                    'mail' => $value->getUser()->getUsername(),
+                    'createdAt' => $value->getCreatedAt()
+                ];   
+            }
+            
             $formatted = [];
             $formatted [] = [
-               'userConnected' => $this->getUser(),
+               'userConnected' => $this->getUser()->getId(),
+               'userEmail' => $this->getUser()->getUsername(),
                'id' => $cardDetails->getId(),
                'name' => $cardDetails->getName(),
                'description' => $cardDetails->getDescription(),
-               'comments'=> $cardDetails->getComments(),
+               'comments' => $comments,
             ];
         
         return new JsonResponse($formatted);

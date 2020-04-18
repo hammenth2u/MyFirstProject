@@ -10,6 +10,8 @@ let app = {
     let cardName;
     let lastEventName;
     let events;
+    let user;
+    let userEmail;
 
     // Bind events
     $("#modal").click(function() {
@@ -134,6 +136,11 @@ let app = {
                      else {
 
                       if (response !== undefined) {
+                        console.log(response[0]);
+                        app.user = response[0].userConnected;
+                        app.userEmail = response[0].userEmail;
+                        let comments = (response[0].comments);
+
                         let responseHTML = '';
 
                         responseHTML += 
@@ -155,12 +162,14 @@ let app = {
                         +       '<div class="column is-12 col-t is-size-5 steps">'
                         +           '<p><i class="far fa-check-square mr-1"></i></i>Etapes<button class="button is-small is-info s-add ml-1"> <span class="icon is-small"><i class="fas fa-plus-square"></i></span> <span>Ajouter</span></button></p>'
                         +       '</div>'
-                        +       '<div class="column is-12 col-t is-size-5 mb-test">'
+                        +       '<div class="column is-12 col-t is-size-5">'
                         +           '<p><i class="fas fa-comment mr-1"></i></i></i>Commentaires</p>'
-                        +           '<div class="field">'
+                        +           '<div class="field mt-1">'
                         +               '<div class="control">'
                         +                   '<input class="input is-info c-add" type="text" placeholder="Commentaire...">'
                         +               '</div>'
+                        +           '<div class="comments mt-2">'
+                        +           '</div>'
                         +           '</div>'
                         +       '</div>'
                         +   '</div>'
@@ -172,6 +181,16 @@ let app = {
                         +'</div>';
                             
                         $('body').append(responseHTML);
+
+                        // Affichage des commentaires
+                        $.each(comments, function (index, value) {
+                            $('.comments').append(
+                            '<div class="user-comment mt-2">'
+                            + '<i class="fas fa-user-ninja mr-1"></i>' + value.mail 
+                            +   '<div class="comment has-background-white-ter mt-2">' + value.content 
+                            +   '</div>'
+                            +'</div>');
+                        });
 
                         // Refresh event
                         $(".close").click(function() {
@@ -268,7 +287,7 @@ let app = {
 
         app.lastEventName = 'addEventModifyName';
 
-        app.cardName = $('.modal-card-big').find('.modal-card-title').text();
+        app.cardName = $.trim($('.modal-card-big').find('.modal-card-title').text());
 
         $('.modal-card-big').find('.modal-card-title').html(
               '<div class="field">'
@@ -343,7 +362,7 @@ let app = {
             let contentComment = $.trim($('.c-add').val());
             let idCard = app.cardID;
 
-            if ($.trim(contentComment) !== '') {
+            if ((contentComment) !== '') {
                 // Requête AJAX à envoyer + ajout au DOM
                 $.ajax({
                     url: '/addComment', 
@@ -357,9 +376,15 @@ let app = {
                 });
                 // On vide l'input
                 $('.c-add').val('');
-                contentComment = undefined;
                 // Ajout au DOM
-
+                $('.comments').prepend(
+                    '<div class="user-comment mt-2">'
+                    + '<i class="fas fa-user-ninja mr-1"></i>' + app.userEmail
+                    +   '<div class="comment has-background-white-ter mt-2">' + contentComment 
+                    +   '</div>'
+                    +'</div>');
+                // Cleaning
+                contentComment = undefined;
             }
         }
 
@@ -371,7 +396,7 @@ let app = {
             {
                     console.log('finish event ModifyName');
                     $(window).off();
-                    let name = $('.input-title').val();
+                    let name = $.trim($('.input-title').val());
                     let idCard = app.cardID;
 
                     if (name !== app.cardName) {
