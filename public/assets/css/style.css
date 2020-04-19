@@ -139,8 +139,12 @@ html {
 }
 
 .comment {
-    padding: 2rem;
+    padding: 1rem;
     border-radius: 0.5rem;
+}
+
+.dropdown-menu-labels {
+    min-width: calc(50vw - 40px);
 }
 
  /* Modifiers */
