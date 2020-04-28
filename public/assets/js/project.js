@@ -12,6 +12,8 @@ let app = {
     let events;
     let user;
     let userEmail;
+    let colorLabel;
+    let boolAddClass;
 
     // Bind events
     $("#modal").click(function() {
@@ -108,23 +110,46 @@ let app = {
                         +               'Etiquettes'
                         +            '<div class="dropdown dropdown-labels">'
                         +              '<div class="dropdown-trigger">'
-                        +                '<button class="button is-small ml-1" aria-haspopup="true" aria-controls="dropdown-menu2">'
+                        +                '<button class="button button-l is-small is-info ml-1" aria-haspopup="true" aria-controls="dropdown-menu2">'
                         +                    '<span>Gérer</span>'
                         +                    '<span class="icon is-small">'
                         +                    '<i class="fas fa-angle-down" aria-hidden="true"></i>'
                         +                    '</span>'
                         +                '</button>'
                         +                '</div>'
-                        +                '<div class="dropdown-menu dropdown-menu-labels" id="dropdown-menu2" role="menu">'
-                        +                '<div class="dropdown-content">'
-                        +                    '<div class="dropdown-item">'
-                        +                    '<p>Ici les labels déjà créés au niveau du projet entier, selectionnables pour les ajouter au niveau de la card</p>'
+                        +                '<div class="dropdown-menu dropdown-menu-labels border-is-gray" id="dropdown-menu2" role="menu">'
+                        +                '<div class="dropdown-content has-text-black">'
+                        +                    '<div class="dropdown-item has-text-black">'
+                        +                       '<p class="is-size-5">'
+                        +                           '<i class="fas fa-tags mr-1"></i> Etiquettes ('
+                        +                           '<span class="labels-count">'
+                        +                           '0'
+                        +                           '</span>)'
+                        +                          '<div class="field is-grouped labels mt-1 is-grouped-multiline is-size-5">'
+                        +                            '</div>'
+                        +                       '</p>'
                         +                    '</div>'
                         +                    '<hr class="dropdown-divider">'
-                        +                    '<div class="dropdown-item">'
-                        +                    '<p>Ici un input et le choix de la couleur pour ajouter un nouveau label</p>'
+                        +                    '<div class="has-text-centered">'
+                        +                       '<i class="fas fa-tag mr-1"></i> Nouvelle étiquette'
                         +                    '</div>'
-                        +                    '<hr class="dropdown-divider">'
+                        +                    '<div class="dropdown-item">'
+                        +                       '<input class="input input--label" type="text" placeholder="Nom de l\'étiquette">'
+                        +                           '<span class="control has-icons-left">'
+                        +                               '<div class="select ml-1">'
+                        +                                   '<select id="labels-select" class="is-blue-label">'
+                        +                                    '<option selected class="is-blue-label" value="1" data-color="blue">Bleu</option>'
+                        +                                    '<option value="2" class="select-label is-white-label" data-color="white">Blanc</option>'
+                        
+                        +                                    '<option class="is-yellow-label" value="3" data-color="yellow">Jaune</option>'
+                        +                                    '</select>'
+                        +                                    '<div class="icon is-small is-left">'
+                        +                                       '<i class="fas fa-tint"></i>'
+                        +                                    '</div>'
+                        +                                '</div>'
+                        +                           '</span>'
+                        +                           '<button class="l-add button is-success ml-1">OK</button>'
+                        +                               '</div>'
                         +                '</div>'
                         +                '</div>'
                         +            '</div>'
@@ -412,7 +437,7 @@ let app = {
     // addEventNewLabel function
     // Méthode permettant de gérer la modification de la description d'une card
     // #######################################################################
-    addEventNewLabel : function() {
+    addEventNewLabel : function(e) {
 
         // Vérifier si un évenement est déjà en cours
         if (app.lastEventName !== undefined) {
@@ -421,18 +446,66 @@ let app = {
         }
 
         app.lastEventName = 'addEventNewLabel';
+        app.boolAddClass = true;
 
         // On affiche le menu
         $('.dropdown-labels').addClass('is-active');
         
-        $(this).off();
+        let currentLabelColorClass = 'is-' + $('#labels-select').find(':selected').data('color') + '-label';
 
-        $(window).click(function (event) {
-            if (!$(event.target).closest(".dropdown-labels").length) {
-                app.finishLastEvent(app.lastEventName);
+        $('#labels-select').on('change', function() {
+            let currentColor = $('#labels-select').find(':selected').data('color');
+            app.colorLabel = currentColor;
+            // Mise à jour couleur select
+            $('#labels-select').removeClass(currentLabelColorClass);
+            // On build la classe
+            currentLabelColorClass = 'is-' + currentColor + '-label';
+            // On rajoute la classe sur le select
+            $('#labels-select').addClass(currentLabelColorClass);
+        });
+
+        $('.l-add').on('click', function() {
+            labelName = $.trim($('.input--label').val());
+
+            if (labelName != '') {
+                // Ajout au DOM uniquement si validé côté backend (A FAIRE)
+                $('.labels').append(
+                     '<div class="control">'
+                   +  '<div class="tags has-addons">'
+                   +    '<a class="tag is-medium ' + currentLabelColorClass + '">' + labelName + '</a>'
+                   +    '<a class="tag is-medium is-delete"></a>'
+                   +  '</div>'
+                   + '</div>');
+
+                // UniqueID temporaire
+                let uniqID = (([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+                    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)));
+
+                // Ajout événements deleteLabelFromProject + bindLabelToCard
+
+                // Ajout du label dans le DOM de la card
+
+                // Ajout du label dans le DOM de la task
+
+                // Update compteur labels
+                let labelsCount = parseInt($('.labels-count').text());
+                labelsCount = labelsCount + 1;
+                $('.labels-count').html(labelsCount);
             }
         });
 
+        $(this).off();
+
+        $(window).click(function (event) {
+            if ((!$(event.target).closest('.dropdown-labels').length) || ($(event.target).closest('.dropdown-labels-close').length)) {
+                app.finishLastEvent(app.lastEventName);
+            }
+
+            if (app.boolAddClass == true) {
+                $('.button-l').addClass('dropdown-labels-close');
+            }
+
+        });
     },
 
     // #######################################################################
@@ -476,14 +549,14 @@ let app = {
             if ((lastEventName) == 'addEventModifyDescription')
             {
                     $(window).off();
-                    console.log('finish event ModifyDescription');
                     // Récupération contenu textarea
-                    let description = $('.modal-card-big').find('.textarea').val().replace( /\r?\n/g, "<br>" );
+                    let description = $('.modal-card-big').find('.textarea').val();
                     let idCard = app.cardID;
-                    console.log(description);
 
                     // Si la valeur du textarea est différente de la valeur récup de base on sauvegarde -> requête AJAX
                     if (description !== app.descriptionContent) {
+
+                        description = description.replace( /\r?\n/g, "<br>" );
                         
                         $.ajax({
                             url: '/updateCardDescription', 
@@ -501,13 +574,13 @@ let app = {
                     $('.modal-card-big').find('.textarea').remove();
                     $('.modal-card-big').find('.description--buttons').remove();
                     // Ajout du contenu dans le DOM
-                    $('.modal-card-big').find('.description').html(description);
+                    $('.modal-card-big').find('.description').html(description.replace( /\r?\n/g, "<br>" ));
 
                     // Refresh event
                     $(app.events.each( function() {
                         $(this).click(app.addEventModifyDescription);
                     }));
-                    // Free variable
+                    // Clean variable
                     description = undefined;
                     idCard = undefined;
                     app.lastEventName = undefined;
@@ -538,11 +611,14 @@ let app = {
             {
                 // On ferme le menu
                 $('.dropdown-labels').removeClass('is-active');
+                $('.button-l').removeClass('dropdown-labels-close');
 
                 $(window).off();
+                $('.l-add').off();
                 
                 $('.dropdown-labels').on('click', app.addEventNewLabel);
                 app.lastEventName = undefined;
+                app.boolAddClass = false;
             }
     },
 
